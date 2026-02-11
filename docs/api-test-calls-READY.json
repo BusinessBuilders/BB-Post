@@ -1,0 +1,93 @@
+{
+  "README": "This file contains READY-TO-USE API calls with your actual credentials. Just copy-paste the URLs!",
+  "variables": {
+    "instagram_id": "17841478147973244",
+    "instagram_token": "IGAATpv77WwZCVBZAGJobk5Pd09PZA2tDUVY3VEtMcEtTZAkNySF9xQTVCdUk1dzdHcy1EY1o0Wjc3aGU1TzlGdF9zMm44ZAkdVd1FYU2JaNnNMUXBaZAmgwdGliblZAuWVZAENE1tdV9qcXZAnNmNuU3BScERxVnJB",
+    "threads_user_id": "24965581389786394",
+    "threads_token": "THAAWZC0uKc5IxBUVNEcUtEeFBSelJxZAjJXbmUyRERtS2RvWWVGaExWU0hPMUFUNFp6dGdCXzB2c3hUOWdDQnBXdHVxMFhVVnpsZAGdiZAlRna2hyQl93R2d2aFBrd3V4VFoxdXhwSXRRSjB4SUxBcnU2bm9ET3Vqc2tfSWtJNUdaalRzZAwZDZD"
+  },
+  "QUICK_TEST_URLS": {
+    "INSTAGRAM_INSIGHTS": "https://graph.instagram.com/v21.0/17841478147973244/insights?metric=follower_count,reach&period=day&access_token=IGAATpv77WwZCVBZAGJobk5Pd09PZA2tDUVY3VEtMcEtTZAkNySF9xQTVCdUk1dzdHcy1EY1o0Wjc3aGU1TzlGdF9zMm44ZAkdVd1FYU2JaNnNMUXBaZAmgwdGliblZAuWVZAENE1tdV9qcXZAnNmNuU3BScERxVnJB",
+    "THREADS_PROFILE_LOOKUP": "https://graph.threads.net/v1.0/profile_lookup?username=zuck&access_token=THAAWZC0uKc5IxBUVNEcUtEeFBSelJxZAjJXbmUyRERtS2RvWWVGaExWU0hPMUFUNFp6dGdCXzB2c3hUOWdDQnBXdHVxMFhVVnpsZAGdiZAlRna2hyQl93R2d2aFBrd3V4VFoxdXhwSXRRSjB4SUxBcnU2bm9ET3Vqc2tfSWtJNUdaalRzZAwZDZD"
+  },
+  "STEP_BY_STEP_API_CALLS": {
+    "INSTAGRAM_1_CREATE_MEDIA": {
+      "permission_tested": "instagram_business_content_publish",
+      "method": "POST",
+      "url": "https://graph.instagram.com/v21.0/17841478147973244/media",
+      "graph_api_explorer_url": "https://graph.instagram.com/v21.0/17841478147973244/media?image_url=https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0&caption=Testing%20Instagram%20Business%20API%20for%20Facebook%20app%20review!%20%F0%9F%9A%80&access_token=IGAATpv77WwZCVBZAGJobk5Pd09PZA2tDUVY3VEtMcEtTZAkNySF9xQTVCdUk1dzdHcy1EY1o0Wjc3aGU1TzlGdF9zMm44ZAkdVd1FYU2JaNnNMUXBaZAmgwdGliblZAuWVZAENE1tdV9qcXZAnNmNuU3BScERxVnJB",
+      "curl_command": "curl -X POST 'https://graph.instagram.com/v21.0/17841478147973244/media' -d 'image_url=https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0' -d 'caption=Testing Instagram Business API!' -d 'access_token=IGAATpv77WwZCVBZAGJobk5Pd09PZA2tDUVY3VEtMcEtTZAkNySF9xQTVCdUk1dzdHcy1EY1o0Wjc3aGU1TzlGdF9zMm44ZAkdVd1FYU2JaNnNMUXBaZAmgwdGliblZAuWVZAENE1tdV9qcXZAnNmNuU3BScERxVnJB'",
+      "note": "🔴 SAVE THE 'id' FROM RESPONSE - You'll need it for step 2!"
+    },
+    "INSTAGRAM_2_PUBLISH_POST": {
+      "permission_tested": "instagram_business_content_publish",
+      "method": "POST",
+      "url_template": "https://graph.instagram.com/v21.0/17841478147973244/media_publish?creation_id=PASTE_MEDIA_ID_HERE&access_token=IGAATpv77WwZCVBZAGJobk5Pd09PZA2tDUVY3VEtMcEtTZAkNySF9xQTVCdUk1dzdHcy1EY1o0Wjc3aGU1TzlGdF9zMm40ZAkdVd1FYU2JaNnNMUXBaZAmgwdGliblZAuWVZAENE1tdV9qcXZAnNmNuU3BScERxVnJB",
+      "curl_command_template": "curl -X POST 'https://graph.instagram.com/v21.0/17841478147973244/media_publish' -d 'creation_id=PASTE_MEDIA_ID_HERE' -d 'access_token=IGAATpv77WwZCVBZAGJobk5Pd09PZA2tDUVY3VEtMcEtTZAkNySF9xQTVCdUk1dzdHcy1EY1o0Wjc3aGU1TzlGdF9zMm40ZAkdVd1FYU2JaNnNMUXBaZAmgwdGliblZAuWVZAENE1tdV9qcXZAnNmNuU3BScERxVnJB'",
+      "note": "⏰ WAIT 30 SECONDS after step 1 before running this! Then 🔴 SAVE THE 'id' FROM RESPONSE for step 3!"
+    },
+    "INSTAGRAM_3_ADD_COMMENT": {
+      "permission_tested": "instagram_business_manage_comments",
+      "method": "POST",
+      "url_template": "https://graph.facebook.com/v21.0/PASTE_POST_ID_HERE/comments?message=Testing%20comment%20management%20for%20Facebook%20app%20review!&access_token=IGAATpv77WwZCVBZAGJobk5Pd09PZA2tDUVY3VEtMcEtTZAkNySF9xQTVCdUk1dzdHcy1EY1o0Wjc3aGU1TzlGdF9zMm40ZAkdVd1FYU2JaNnNMUXBaZAmgwdGliblZAuWVZAENE1tdV9qcXZAnNmNuU3BScERxVnJB",
+      "curl_command_template": "curl -X POST 'https://graph.facebook.com/v21.0/PASTE_POST_ID_HERE/comments' -d 'message=Testing comment management!' -d 'access_token=IGAATpv77WwZCVBZAGJobk5Pd09PZA2tDUVY3VEtMcEtTZAkNySF9xQTVCdUk1dzdHcy1EY1o0Wjc3aGU1TzlGdF9zMm40ZAkdVd1FYU2JaNnNMUXBaZAmgwdGliblZAuWVZAENE1tdV9qcXZAnNmNuU3BScERxVnJB'",
+      "note": "Replace PASTE_POST_ID_HERE with the post ID from step 2"
+    },
+    "INSTAGRAM_4_GET_INSIGHTS": {
+      "permission_tested": "instagram_business_manage_insights",
+      "method": "GET",
+      "url": "https://graph.instagram.com/v21.0/17841478147973244/insights?metric=follower_count,reach&period=day&access_token=IGAATpv77WwZCVBZAGJobk5Pd09PZA2tDUVY3VEtMcEtTZAkNySF9xQTVCdUk1dzdHcy1EY1o0Wjc3aGU1TzlGdF9zMm40ZAkdVd1FYU2JaNnNMUXBaZAmgwdGliblZAuWVZAENE1tdV9qcXZAnNmNuU3BScERxVnJB",
+      "curl_command": "curl 'https://graph.instagram.com/v21.0/17841478147973244/insights?metric=follower_count,reach&period=day&access_token=IGAATpv77WwZCVBZAGJobk5Pd09PZA2tDUVY3VEtMcEtTZAkNySF9xQTVCdUk1dzdHcy1EY1o0Wjc3aGU1TzlGdF9zMm40ZAkdVd1FYU2JaNnNMUXBaZAmgwdGliblZAuWVZAENE1tdV9qcXZAnNmNuU3BScERxVnJB'",
+      "note": "✅ TESTED - This works! Copy-paste the URL into browser or Graph API Explorer"
+    },
+    "INSTAGRAM_5_GET_ENGAGEMENT_INSIGHTS": {
+      "permission_tested": "instagram_business_manage_insights",
+      "method": "GET",
+      "url": "https://graph.instagram.com/v21.0/17841478147973244/insights?metric=likes,views,comments,shares,saves,replies&metric_type=total_value&period=day&access_token=IGAATpv77WwZCVBZAGJobk5Pd09PZA2tDUVY3VEtMcEtTZAkNySF9xQTVCdUk1dzdHcy1EY1o0Wjc3aGU1TzlGdF9zMm40ZAkdVd1FYU2JaNnNMUXBaZAmgwdGliblZAuWVZAENE1tdV9qcXZAnNmNuU3BScERxVnJB",
+      "curl_command": "curl 'https://graph.instagram.com/v21.0/17841478147973244/insights?metric=likes,views,comments,shares,saves,replies&metric_type=total_value&period=day&access_token=IGAATpv77WwZCVBZAGJobk5Pd09PZA2tDUVY3VEtMcEtTZAkNySF9xQTVCdUk1dzdHcy1EY1o0Wjc3aGU1TzlGdF9zMm40ZAkdVd1FYU2JaNnNMUXBaZAmgwdGliblZAuWVZAENE1tdV9qcXZAnNmNuU3BScERxVnJB'",
+      "note": "Copy-paste the URL into browser or Graph API Explorer"
+    },
+    "THREADS_1_CREATE_THREAD": {
+      "permission_tested": "threads_content_publish",
+      "method": "POST",
+      "url": "https://graph.threads.net/v1.0/24965581389786394/threads",
+      "curl_command": "curl -X POST 'https://graph.threads.net/v1.0/24965581389786394/threads' -F 'media_type=TEXT' -F 'text=Testing Threads API for Facebook app review! 🧵' -F 'access_token=THAAWZC0uKc5IxBUVNEcUtEeFBSelJxZAjJXbmUyRERtS2RvWWVGaExWU0hPMUFUNFp6dGdCXzB2c3hUOWdDQnBXdHVxMFhVVnpsZAGdiZAlRna2hyQl93R2d2aFBrd3V4VFoxdXhwSXRRSjB4SUxBcnU2bm9ET3Vqc2tfSWtJNUdaalRzZAwZDZD'",
+      "note": "🔴 SAVE THE 'id' FROM RESPONSE - You'll need it for step 2!"
+    },
+    "THREADS_2_PUBLISH_THREAD": {
+      "permission_tested": "threads_content_publish",
+      "method": "POST",
+      "url_template": "https://graph.threads.net/v1.0/24965581389786394/threads_publish?creation_id=PASTE_CREATION_ID_HERE&access_token=THAAWZC0uKc5IxBUVNEcUtEeFBSelJxZAjJXbmUyRERtS2RvWWVGaExWU0hPMUFUNFp6dGdCXzB2c3hUOWdDQnBXdHVxMFhVVnpsZAGdiZAlRna2hyQl93R2d2aFBrd3V4VFoxdXhwSXRRSjB4SUxBcnU2bm9ET3Vqc2tfSWtJNUdaalRzZAwZDZD",
+      "curl_command_template": "curl -X POST 'https://graph.threads.net/v1.0/24965581389786394/threads_publish' -d 'creation_id=PASTE_CREATION_ID_HERE' -d 'access_token=THAAWZC0uKc5IxBUVNEcUtEeFBSelJxZAjJXbmUyRERtS2RvWWVGaExWU0hPMUFUNFp6dGdCXzB2c3hUOWdDQnBXdHVxMFhVVnpsZAGdiZAlRna2hyQl93R2d2aFBrd3V4VFoxdXhwSXRRSjB4SUxBcnU2bm9ET3Vqc2tfSWtJNUdaalRzZAwZDZD'",
+      "note": "🔴 SAVE THE 'id' FROM RESPONSE - This is your thread ID for replies!"
+    },
+    "THREADS_3_CREATE_REPLY": {
+      "permission_tested": "threads_manage_replies",
+      "method": "POST",
+      "url": "https://graph.threads.net/v1.0/24965581389786394/threads",
+      "curl_command_template": "curl -X POST 'https://graph.threads.net/v1.0/24965581389786394/threads' -F 'media_type=TEXT' -F 'text=Testing reply management!' -F 'reply_to_id=PASTE_THREAD_ID_HERE' -F 'access_token=THAAWZC0uKc5IxBUVNEcUtEeFBSelJxZAjJXbmUyRERtS2RvWWVGaExWU0hPMUFUNFp6dGdCXzB2c3hUOWdDQnBXdHVxMFhVVnpsZAGdiZAlRna2hyQl93R2d2aFBrd3V4VFoxdXhwSXRRSjB4SUxBcnU2bm9ET3Vqc2tfSWtJNUdaalRzZAwZDZD'",
+      "note": "Replace PASTE_THREAD_ID_HERE with thread ID from step 2. 🔴 SAVE THE REPLY 'id' FROM RESPONSE!"
+    },
+    "THREADS_4_PUBLISH_REPLY": {
+      "permission_tested": "threads_manage_replies",
+      "method": "POST",
+      "url_template": "https://graph.threads.net/v1.0/24965581389786394/threads_publish?creation_id=PASTE_REPLY_CREATION_ID_HERE&access_token=THAAWZC0uKc5IxBUVNEcUtEeFBSelJxZAjJXbmUyRERtS2RvWWVGaExWU0hPMUFUNFp6dGdCXzB2c3hUOWdDQnBXdHVxMFhVVnpsZAGdiZAlRna2hyQl93R2d2aFBrd3V4VFoxdXhwSXRRSjB4SUxBcnU2bm9ET3Vqc2tfSWtJNUdaalRzZAwZDZD",
+      "curl_command_template": "curl -X POST 'https://graph.threads.net/v1.0/24965581389786394/threads_publish' -d 'creation_id=PASTE_REPLY_CREATION_ID_HERE' -d 'access_token=THAAWZC0uKc5IxBUVNEcUtEeFBSelJxZAjJXbmUyRERtS2RvWWVGaExWU0hPMUFUNFp6dGdCXzB2c3hUOWdDQnBXdHVxMFhVVnpsZAGdiZAlRna2hyQl93R2d2aFBrd3V4VFoxdXhwSXRRSjB4SUxBcnU2bm9ET3Vqc2tfSWtJNUdaalRzZAwZDZD'",
+      "note": "Replace PASTE_REPLY_CREATION_ID_HERE with reply creation ID from step 3"
+    },
+    "THREADS_5_GET_INSIGHTS": {
+      "permission_tested": "threads_manage_insights",
+      "method": "GET",
+      "url": "https://graph.threads.net/v1.0/24965581389786394/threads_insights?metric=views,likes,replies,reposts,quotes&period=day&access_token=THAAWZC0uKc5IxBUVNEcUtEeFBSelJxZAjJXbmUyRERtS2RvWWVGaExWU0hPMUFUNFp6dGdCXzB2c3hUOWdDQnBXdHVxMFhVVnpsZAGdiZAlRna2hyQl93R2d2aFBrd3V4VFoxdXhwSXRRSjB4SUxBcnU2bm9ET3Vqc2tfSWtJNUdaalRzZAwZDZD",
+      "curl_command": "curl 'https://graph.threads.net/v1.0/24965581389786394/threads_insights?metric=views,likes,replies,reposts,quotes&period=day&access_token=THAAWZC0uKc5IxBUVNEcUtEeFBSelJxZAjJXbmUyRERtS2RvWWVGaExWU0hPMUFUNFp6dGdCXzB2c3hUOWdDQnBXdHVxMFhVVnpsZAGdiZAlRna2hyQl93R2d2aFBrd3V4VFoxdXhwSXRRSjB4SUxBcnU2bm9ET3Vqc2tfSWtJNUdaalRzZAwZDZD'",
+      "note": "Copy-paste the URL into browser or Graph API Explorer"
+    },
+    "THREADS_6_PROFILE_LOOKUP": {
+      "permission_tested": "threads_profile_discovery",
+      "method": "GET",
+      "url": "https://graph.threads.net/v1.0/profile_lookup?username=zuck&access_token=THAAWZC0uKc5IxBUVNEcUtEeFBSelJxZAjJXbmUyRERtS2RvWWVGaExWU0hPMUFUNFp6dGdCXzB2c3hUOWdDQnBXdHVxMFhVVnpsZAGdiZAlRna2hyQl93R2d2aFBrd3V4VFoxdXhwSXRRSjB4SUxBcnU2bm9ET3Vqc2tfSWtJNUdaalRzZAwZDZD",
+      "curl_command": "curl 'https://graph.threads.net/v1.0/profile_lookup?username=zuck&access_token=THAAWZC0uKc5IxBUVNEcUtEeFBSelJxZAjJXbmUyRERtS2RvWWVGaExWU0hPMUFUNFp6dGdCXzB2c3hUOWdDQnBXdHVxMFhVVnpsZAGdiZAlRna2hyQl93R2d2aFBrd3V4VFoxdXhwSXRRSjB4SUxBcnU2bm9ET3Vqc2tfSWtJNUdaalRzZAwZDZD'",
+      "note": "✅ Copy-paste the URL into browser or Graph API Explorer"
+    }
+  }
+}

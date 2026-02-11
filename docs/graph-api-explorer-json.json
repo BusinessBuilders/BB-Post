@@ -1,0 +1,113 @@
+{
+  "README": "Copy these JSON objects and paste into the Graph API Explorer JSON tab",
+  "INSTAGRAM_API_CALLS": {
+    "1_CREATE_MEDIA_CONTAINER": {
+      "instruction": "Change method to POST, URL to: /17841478147973244/media, paste this JSON:",
+      "json": {
+        "image_url": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
+        "caption": "Testing Instagram Business API for Facebook app review! 🚀 #APITest"
+      },
+      "permission": "instagram_business_content_publish",
+      "note": "SAVE THE 'id' FROM RESPONSE"
+    },
+    "2_PUBLISH_POST": {
+      "instruction": "Change method to POST, URL to: /17841478147973244/media_publish, paste this JSON (replace MEDIA_ID):",
+      "json": {
+        "creation_id": "PASTE_MEDIA_ID_FROM_STEP_1"
+      },
+      "permission": "instagram_business_content_publish",
+      "note": "Wait 30 seconds after step 1. SAVE THE 'id' FROM RESPONSE"
+    },
+    "3_ADD_COMMENT": {
+      "instruction": "Change method to POST, URL to: /PASTE_POST_ID_FROM_STEP_2/comments, paste this JSON:",
+      "json": {
+        "message": "Testing comment management for Facebook app review! This demonstrates instagram_business_manage_comments."
+      },
+      "permission": "instagram_business_manage_comments"
+    },
+    "4_GET_ACCOUNT_INSIGHTS": {
+      "instruction": "Method: GET, URL: /17841478147973244/insights?metric=follower_count,reach&period=day",
+      "json": null,
+      "permission": "instagram_business_manage_insights",
+      "note": "No JSON needed for GET requests - just paste URL and click Submit"
+    },
+    "5_GET_ENGAGEMENT_INSIGHTS": {
+      "instruction": "Method: GET, URL: /17841478147973244/insights?metric=likes,views,comments,shares,saves,replies&metric_type=total_value&period=day",
+      "json": null,
+      "permission": "instagram_business_manage_insights",
+      "note": "No JSON needed for GET requests"
+    }
+  },
+  "THREADS_API_CALLS": {
+    "1_CREATE_THREAD": {
+      "instruction": "Switch to Threads app (1618287349523596), POST to: /24965581389786394/threads, paste this JSON:",
+      "json": {
+        "media_type": "TEXT",
+        "text": "Testing Threads API for Facebook app review! 🧵 This demonstrates threads_content_publish."
+      },
+      "permission": "threads_content_publish",
+      "note": "SAVE THE 'id' FROM RESPONSE"
+    },
+    "2_PUBLISH_THREAD": {
+      "instruction": "POST to: /24965581389786394/threads_publish, paste this JSON (replace CREATION_ID):",
+      "json": {
+        "creation_id": "PASTE_CREATION_ID_FROM_STEP_1"
+      },
+      "permission": "threads_content_publish",
+      "note": "SAVE THE 'id' FROM RESPONSE - this is your thread ID"
+    },
+    "3_CREATE_REPLY": {
+      "instruction": "POST to: /24965581389786394/threads, paste this JSON (replace THREAD_ID):",
+      "json": {
+        "media_type": "TEXT",
+        "text": "Testing reply management for Facebook app review! This demonstrates threads_manage_replies.",
+        "reply_to_id": "PASTE_THREAD_ID_FROM_STEP_2"
+      },
+      "permission": "threads_manage_replies",
+      "note": "SAVE THE 'id' FROM RESPONSE"
+    },
+    "4_PUBLISH_REPLY": {
+      "instruction": "POST to: /24965581389786394/threads_publish, paste this JSON (replace REPLY_CREATION_ID):",
+      "json": {
+        "creation_id": "PASTE_REPLY_CREATION_ID_FROM_STEP_3"
+      },
+      "permission": "threads_manage_replies"
+    },
+    "5_GET_INSIGHTS": {
+      "instruction": "Method: GET, URL: /24965581389786394/threads_insights?metric=views,likes,replies,reposts,quotes&period=day",
+      "json": null,
+      "permission": "threads_manage_insights",
+      "note": "No JSON needed for GET requests"
+    },
+    "6_PROFILE_LOOKUP": {
+      "instruction": "Method: GET, URL: /profile_lookup?username=zuck",
+      "json": null,
+      "permission": "threads_profile_discovery",
+      "note": "No JSON needed. Try different usernames: zuck, instagram, threads"
+    }
+  },
+  "COPY_PASTE_READY": {
+    "INSTAGRAM_CREATE_MEDIA_JSON": {
+      "image_url": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
+      "caption": "Testing Instagram Business API for Facebook app review! 🚀"
+    },
+    "INSTAGRAM_PUBLISH_JSON": {
+      "creation_id": "YOUR_MEDIA_ID_HERE"
+    },
+    "INSTAGRAM_COMMENT_JSON": {
+      "message": "Testing comment management for app review!"
+    },
+    "THREADS_CREATE_JSON": {
+      "media_type": "TEXT",
+      "text": "Testing Threads API for Facebook app review! 🧵"
+    },
+    "THREADS_PUBLISH_JSON": {
+      "creation_id": "YOUR_CREATION_ID_HERE"
+    },
+    "THREADS_REPLY_JSON": {
+      "media_type": "TEXT",
+      "text": "Testing reply management!",
+      "reply_to_id": "YOUR_THREAD_ID_HERE"
+    }
+  }
+}

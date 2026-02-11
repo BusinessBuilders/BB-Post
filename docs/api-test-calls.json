@@ -1,0 +1,431 @@
+{
+  "variables": {
+    "instagram_id": "YOUR_INSTAGRAM_BUSINESS_ID",
+    "instagram_token": "YOUR_INSTAGRAM_ACCESS_TOKEN",
+    "threads_user_id": "YOUR_THREADS_USER_ID",
+    "threads_token": "YOUR_THREADS_ACCESS_TOKEN"
+  },
+  "instagram_tests": {
+    "1_create_media_container": {
+      "method": "POST",
+      "url": "https://graph.instagram.com/v21.0/{{instagram_id}}/media",
+      "body": {
+        "image_url": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
+        "caption": "Testing Instagram Business API for Facebook app review! 🚀 #APITest",
+        "access_token": "{{instagram_token}}"
+      },
+      "save_response_field": "id",
+      "save_as": "media_container_id"
+    },
+    "2_check_media_status": {
+      "method": "GET",
+      "url": "https://graph.instagram.com/v21.0/{{media_container_id}}",
+      "params": {
+        "fields": "status_code",
+        "access_token": "{{instagram_token}}"
+      },
+      "wait_seconds": 30,
+      "expected_response": {
+        "status_code": "FINISHED"
+      }
+    },
+    "3_publish_post": {
+      "method": "POST",
+      "url": "https://graph.instagram.com/v21.0/{{instagram_id}}/media_publish",
+      "body": {
+        "creation_id": "{{media_container_id}}",
+        "access_token": "{{instagram_token}}"
+      },
+      "permission": "instagram_business_content_publish",
+      "save_response_field": "id",
+      "save_as": "post_id"
+    },
+    "4_add_comment": {
+      "method": "POST",
+      "url": "https://graph.facebook.com/v21.0/{{post_id}}/comments",
+      "body": {
+        "message": "Testing comment management for Facebook app review! This demonstrates instagram_business_manage_comments permission.",
+        "access_token": "{{instagram_token}}"
+      },
+      "permission": "instagram_business_manage_comments",
+      "save_response_field": "id",
+      "save_as": "comment_id"
+    },
+    "5_get_account_insights": {
+      "method": "GET",
+      "url": "https://graph.instagram.com/v21.0/{{instagram_id}}/insights",
+      "params": {
+        "metric": "follower_count,reach",
+        "period": "day",
+        "access_token": "{{instagram_token}}"
+      },
+      "permission": "instagram_business_manage_insights"
+    },
+    "6_get_engagement_insights": {
+      "method": "GET",
+      "url": "https://graph.instagram.com/v21.0/{{instagram_id}}/insights",
+      "params": {
+        "metric": "likes,views,comments,shares,saves,replies",
+        "metric_type": "total_value",
+        "period": "day",
+        "access_token": "{{instagram_token}}"
+      },
+      "permission": "instagram_business_manage_insights"
+    }
+  },
+  "threads_tests": {
+    "1_create_thread": {
+      "method": "POST",
+      "url": "https://graph.threads.net/v1.0/{{threads_user_id}}/threads",
+      "body": {
+        "media_type": "TEXT",
+        "text": "Testing Threads API for Facebook app review! 🧵 This demonstrates threads_content_publish permission.",
+        "access_token": "{{threads_token}}"
+      },
+      "content_type": "multipart/form-data",
+      "save_response_field": "id",
+      "save_as": "thread_creation_id"
+    },
+    "2_publish_thread": {
+      "method": "POST",
+      "url": "https://graph.threads.net/v1.0/{{threads_user_id}}/threads_publish",
+      "body": {
+        "creation_id": "{{thread_creation_id}}",
+        "access_token": "{{threads_token}}"
+      },
+      "permission": "threads_content_publish",
+      "save_response_field": "id",
+      "save_as": "thread_id"
+    },
+    "3_create_reply": {
+      "method": "POST",
+      "url": "https://graph.threads.net/v1.0/{{threads_user_id}}/threads",
+      "body": {
+        "media_type": "TEXT",
+        "text": "Testing reply management for app review! This demonstrates threads_manage_replies permission.",
+        "reply_to_id": "{{thread_id}}",
+        "access_token": "{{threads_token}}"
+      },
+      "content_type": "multipart/form-data",
+      "save_response_field": "id",
+      "save_as": "reply_creation_id"
+    },
+    "4_publish_reply": {
+      "method": "POST",
+      "url": "https://graph.threads.net/v1.0/{{threads_user_id}}/threads_publish",
+      "body": {
+        "creation_id": "{{reply_creation_id}}",
+        "access_token": "{{threads_token}}"
+      },
+      "permission": "threads_manage_replies",
+      "save_response_field": "id",
+      "save_as": "reply_thread_id"
+    },
+    "5_get_thread_insights": {
+      "method": "GET",
+      "url": "https://graph.threads.net/v1.0/{{threads_user_id}}/threads_insights",
+      "params": {
+        "metric": "views,likes,replies,reposts,quotes",
+        "period": "day",
+        "access_token": "{{threads_token}}"
+      },
+      "permission": "threads_manage_insights"
+    },
+    "6_profile_lookup_zuck": {
+      "method": "GET",
+      "url": "https://graph.threads.net/v1.0/profile_lookup",
+      "params": {
+        "username": "zuck",
+        "access_token": "{{threads_token}}"
+      },
+      "permission": "threads_profile_discovery"
+    },
+    "7_profile_lookup_instagram": {
+      "method": "GET",
+      "url": "https://graph.threads.net/v1.0/profile_lookup",
+      "params": {
+        "username": "instagram",
+        "access_token": "{{threads_token}}"
+      },
+      "permission": "threads_profile_discovery"
+    }
+  },
+  "postman_collection": {
+    "info": {
+      "name": "Instagram & Threads API Testing for App Review",
+      "description": "Complete API test collection for Facebook app review",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+      {
+        "key": "instagram_id",
+        "value": "YOUR_INSTAGRAM_ID",
+        "type": "string"
+      },
+      {
+        "key": "instagram_token",
+        "value": "YOUR_INSTAGRAM_TOKEN",
+        "type": "string"
+      },
+      {
+        "key": "threads_user_id",
+        "value": "YOUR_THREADS_USER_ID",
+        "type": "string"
+      },
+      {
+        "key": "threads_token",
+        "value": "YOUR_THREADS_TOKEN",
+        "type": "string"
+      }
+    ],
+    "item": [
+      {
+        "name": "Instagram Tests",
+        "item": [
+          {
+            "name": "1. Create Media Container",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "url": {
+                "raw": "https://graph.instagram.com/v21.0/{{instagram_id}}/media?image_url=https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0&caption=Testing Instagram Business API!&access_token={{instagram_token}}",
+                "protocol": "https",
+                "host": ["graph", "instagram", "com"],
+                "path": ["v21.0", "{{instagram_id}}", "media"],
+                "query": [
+                  {
+                    "key": "image_url",
+                    "value": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0"
+                  },
+                  {
+                    "key": "caption",
+                    "value": "Testing Instagram Business API!"
+                  },
+                  {
+                    "key": "access_token",
+                    "value": "{{instagram_token}}"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "2. Publish Post",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "url": {
+                "raw": "https://graph.instagram.com/v21.0/{{instagram_id}}/media_publish?creation_id={{media_container_id}}&access_token={{instagram_token}}",
+                "protocol": "https",
+                "host": ["graph", "instagram", "com"],
+                "path": ["v21.0", "{{instagram_id}}", "media_publish"],
+                "query": [
+                  {
+                    "key": "creation_id",
+                    "value": "{{media_container_id}}"
+                  },
+                  {
+                    "key": "access_token",
+                    "value": "{{instagram_token}}"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "3. Add Comment",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "url": {
+                "raw": "https://graph.facebook.com/v21.0/{{post_id}}/comments?message=Testing comment management&access_token={{instagram_token}}",
+                "protocol": "https",
+                "host": ["graph", "facebook", "com"],
+                "path": ["v21.0", "{{post_id}}", "comments"],
+                "query": [
+                  {
+                    "key": "message",
+                    "value": "Testing comment management"
+                  },
+                  {
+                    "key": "access_token",
+                    "value": "{{instagram_token}}"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "4. Get Account Insights",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "https://graph.instagram.com/v21.0/{{instagram_id}}/insights?metric=follower_count,reach&period=day&access_token={{instagram_token}}",
+                "protocol": "https",
+                "host": ["graph", "instagram", "com"],
+                "path": ["v21.0", "{{instagram_id}}", "insights"],
+                "query": [
+                  {
+                    "key": "metric",
+                    "value": "follower_count,reach"
+                  },
+                  {
+                    "key": "period",
+                    "value": "day"
+                  },
+                  {
+                    "key": "access_token",
+                    "value": "{{instagram_token}}"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "5. Get Engagement Insights",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "https://graph.instagram.com/v21.0/{{instagram_id}}/insights?metric=likes,views,comments,shares,saves,replies&metric_type=total_value&period=day&access_token={{instagram_token}}",
+                "protocol": "https",
+                "host": ["graph", "instagram", "com"],
+                "path": ["v21.0", "{{instagram_id}}", "insights"],
+                "query": [
+                  {
+                    "key": "metric",
+                    "value": "likes,views,comments,shares,saves,replies"
+                  },
+                  {
+                    "key": "metric_type",
+                    "value": "total_value"
+                  },
+                  {
+                    "key": "period",
+                    "value": "day"
+                  },
+                  {
+                    "key": "access_token",
+                    "value": "{{instagram_token}}"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Threads Tests",
+        "item": [
+          {
+            "name": "1. Create Thread",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "media_type",
+                    "value": "TEXT",
+                    "type": "text"
+                  },
+                  {
+                    "key": "text",
+                    "value": "Testing Threads API!",
+                    "type": "text"
+                  },
+                  {
+                    "key": "access_token",
+                    "value": "{{threads_token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "url": {
+                "raw": "https://graph.threads.net/v1.0/{{threads_user_id}}/threads",
+                "protocol": "https",
+                "host": ["graph", "threads", "net"],
+                "path": ["v1.0", "{{threads_user_id}}", "threads"]
+              }
+            }
+          },
+          {
+            "name": "2. Publish Thread",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "url": {
+                "raw": "https://graph.threads.net/v1.0/{{threads_user_id}}/threads_publish?creation_id={{thread_creation_id}}&access_token={{threads_token}}",
+                "protocol": "https",
+                "host": ["graph", "threads", "net"],
+                "path": ["v1.0", "{{threads_user_id}}", "threads_publish"],
+                "query": [
+                  {
+                    "key": "creation_id",
+                    "value": "{{thread_creation_id}}"
+                  },
+                  {
+                    "key": "access_token",
+                    "value": "{{threads_token}}"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "3. Get Thread Insights",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "https://graph.threads.net/v1.0/{{threads_user_id}}/threads_insights?metric=views,likes,replies,reposts,quotes&period=day&access_token={{threads_token}}",
+                "protocol": "https",
+                "host": ["graph", "threads", "net"],
+                "path": ["v1.0", "{{threads_user_id}}", "threads_insights"],
+                "query": [
+                  {
+                    "key": "metric",
+                    "value": "views,likes,replies,reposts,quotes"
+                  },
+                  {
+                    "key": "period",
+                    "value": "day"
+                  },
+                  {
+                    "key": "access_token",
+                    "value": "{{threads_token}}"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "4. Profile Lookup",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "https://graph.threads.net/v1.0/profile_lookup?username=zuck&access_token={{threads_token}}",
+                "protocol": "https",
+                "host": ["graph", "threads", "net"],
+                "path": ["v1.0", "profile_lookup"],
+                "query": [
+                  {
+                    "key": "username",
+                    "value": "zuck"
+                  },
+                  {
+                    "key": "access_token",
+                    "value": "{{threads_token}}"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

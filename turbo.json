@@ -1,0 +1,52 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "!.next/cache/**"
+      ],
+      "env": [
+        "NEXT_PUBLIC_BACKEND_URL",
+        "NEXT_PUBLIC_VERSION",
+        "NEXT_PUBLIC_POLOTNO",
+        "NEXT_PUBLIC_DISCORD_SUPPORT",
+        "NEXT_PUBLIC_TOLT",
+        "NEXT_PUBLIC_FACEBOOK_PIXEL",
+        "NEXT_PUBLIC_POSTHOG_KEY",
+        "NEXT_PUBLIC_POSTHOG_HOST",
+        "NEXT_PUBLIC_SENTRY_DSN",
+        "NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY",
+        "NEXT_PUBLIC_POSTIZ_OAUTH_LOGO_URL",
+        "NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME",
+        "NODE_ENV",
+        "STORAGE_PROVIDER",
+        "FRONTEND_URL",
+        "IS_GENERAL",
+        "POSTIZ_GENERIC_OAUTH",
+        "STRIPE_PUBLISHABLE_KEY",
+        "TELEGRAM_BOT_NAME",
+        "NEYNAR_CLIENT_ID",
+        "NOT_SECURED",
+        "DISABLE_IMAGE_COMPRESSION",
+        "DISABLE_X_ANALYTICS",
+        "TRANSLOADIT_AUTH",
+        "TRANSLOADIT_TEMPLATE"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "cache": true
+    }
+  }
+}
