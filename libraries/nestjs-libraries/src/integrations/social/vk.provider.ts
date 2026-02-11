@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import { SocialAbstract } from '@gitroom/nestjs-libraries/integrations/social.abstract';
 import { createHash, randomBytes } from 'crypto';
 import axios from 'axios';
+// @ts-ignore
 import FormDataNew from 'form-data';
 import mime from 'mime-types';
 

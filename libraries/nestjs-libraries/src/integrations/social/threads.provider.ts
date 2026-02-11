@@ -23,7 +23,7 @@ export class ThreadsProvider extends SocialAbstract implements SocialProvider {
     'threads_content_publish',
     'threads_manage_replies',
     'threads_manage_insights',
-    // 'threads_profile_discovery',
+    'threads_profile_discovery',
   ];
   override maxConcurrentJob = 2; // Threads has moderate rate limits
 
@@ -520,28 +520,28 @@ export class ThreadsProvider extends SocialAbstract implements SocialProvider {
     return false;
   }
 
-  // override async mention(
-  //   token: string,
-  //   data: { query: string },
-  //   id: string,
-  //   integration: Integration
-  // ) {
-  //   const p = await (
-  //     await fetch(
-  //       `https://graph.threads.net/v1.0/profile_lookup?username=${data.query}&access_token=${integration.token}`
-  //     )
-  //   ).json();
-  //
-  //   return [
-  //     {
-  //       id: String(p.id),
-  //       label: p.name,
-  //       image: p.profile_picture_url,
-  //     },
-  //   ];
-  // }
-  //
-  // mentionFormat(idOrHandle: string, name: string) {
-  //   return `@${idOrHandle}`;
-  // }
+  override async mention(
+    token: string,
+    data: { query: string },
+    id: string,
+    integration: Integration
+  ) {
+    const p = await (
+      await fetch(
+        `https://graph.threads.net/v1.0/profile_lookup?username=${data.query}&access_token=${integration.token}`
+      )
+    ).json();
+
+    return [
+      {
+        id: String(p.id),
+        label: p.name,
+        image: p.profile_picture_url,
+      },
+    ];
+  }
+
+  mentionFormat(idOrHandle: string, name: string) {
+    return `@${idOrHandle}`;
+  }
 }
