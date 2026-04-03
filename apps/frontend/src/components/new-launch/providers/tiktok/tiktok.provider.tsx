@@ -84,7 +84,12 @@ const TikTokSettings: FC<{
 
   return (
     <div className="flex flex-col">
-      {/*<CheckTikTokValidity picture={props?.values?.[0]?.image?.[0]?.path} />*/}
+      <div className="text-[13px] text-customColor18 bg-tableBorder rounded-[8px] p-[10px] mb-[15px]">
+        {t(
+          'tiktok_processing_notice',
+          'After publishing, it may take a few minutes for your content to be processed and visible on your TikTok profile.'
+        )}
+      </div>
       {isPhoto && <Input label="Title" {...register('title')} maxLength={89} />}
       <Select
         label={t('label_who_can_see_this_video', 'Who can see this video?')}
