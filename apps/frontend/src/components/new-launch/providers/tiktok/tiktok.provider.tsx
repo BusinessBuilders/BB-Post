@@ -148,7 +148,7 @@ const TikTokSettings: FC<{
           variant="hollow"
           disabled={isUploadMode}
           {...register('comment', {
-            value: true,
+            value: false,
           })}
         />
         <Checkbox
