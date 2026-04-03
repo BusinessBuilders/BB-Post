@@ -25,7 +25,7 @@ const TikTokSettings: FC<{
   const { value } = useIntegration();
   const t = useT();
 
-  const isTitle = useMemo(() => {
+  const isPhoto = useMemo(() => {
     return value?.[0]?.image?.some((p) => (p?.path?.indexOf?.('mp4') ?? -1) === -1);
   }, [value]);
 
@@ -83,7 +83,7 @@ const TikTokSettings: FC<{
   return (
     <div className="flex flex-col">
       {/*<CheckTikTokValidity picture={props?.values?.[0]?.image?.[0]?.path} />*/}
-      {isTitle && <Input label="Title" {...register('title')} maxLength={89} />}
+      {isPhoto && <Input label="Title" {...register('title')} maxLength={89} />}
       <Select
         label={t('label_who_can_see_this_video', 'Who can see this video?')}
         disabled={isUploadMode}
@@ -151,22 +151,26 @@ const TikTokSettings: FC<{
             value: false,
           })}
         />
-        <Checkbox
-          variant="hollow"
-          label={t('label_duet', 'Duet')}
-          disabled={isUploadMode}
-          {...register('duet', {
-            value: false,
-          })}
-        />
-        <Checkbox
-          label={t('label_stitch', 'Stitch')}
-          variant="hollow"
-          disabled={isUploadMode}
-          {...register('stitch', {
-            value: false,
-          })}
-        />
+        {!isPhoto && (
+          <Checkbox
+            variant="hollow"
+            label={t('label_duet', 'Duet')}
+            disabled={isUploadMode}
+            {...register('duet', {
+              value: false,
+            })}
+          />
+        )}
+        {!isPhoto && (
+          <Checkbox
+            label={t('label_stitch', 'Stitch')}
+            variant="hollow"
+            disabled={isUploadMode}
+            {...register('stitch', {
+              value: false,
+            })}
+          />
+        )}
       </div>
       <hr className="my-[15px] mb-[25px] border-tableBorder" />
       <div className="flex flex-col gap-[20px]">
