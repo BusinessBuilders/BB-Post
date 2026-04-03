@@ -306,6 +306,21 @@ const TikTokSettings: FC<{
           </div>
         )}
       </div>
+      {!disclose && (
+        <div className="my-[10px] text-[14px] text-balance">
+          {t(
+            'by_posting_you_agree_to_tiktoks',
+            "By posting, you agree to TikTok's"
+          )}{' '}
+          <a
+            target="_blank"
+            className="text-[#B69DEC] hover:underline"
+            href="https://www.tiktok.com/legal/page/global/music-usage-confirmation/en"
+          >
+            {t('music_usage_confirmation', 'Music Usage Confirmation')}
+          </a>
+        </div>
+      )}
     </div>
   );
 };
