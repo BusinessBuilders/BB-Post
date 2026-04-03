@@ -369,7 +369,7 @@ export default withProvider({
     if ((settings as any).disclose && !(settings as any).brand_organic_toggle && !(settings as any).brand_content_toggle) {
       return 'You need to indicate if your content promotes yourself, a third party, or both.';
     }
-    if (!settings.privacy_level) {
+    if (!(settings as any).privacy_level) {
       return 'Please select a privacy level';
     }
     return true;
