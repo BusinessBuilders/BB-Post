@@ -33,7 +33,9 @@ const TikTokSettings: FC<{
   const brand_organic_toggle = watch('brand_organic_toggle');
   const brand_content_toggle = watch('brand_content_toggle');
   const content_posting_method = watch('content_posting_method');
+  const privacy_level = watch('privacy_level');
   const isUploadMode = content_posting_method === 'UPLOAD';
+  const isPrivate = privacy_level === 'SELF_ONLY';
 
   const privacyLevel = [
     {
@@ -91,8 +93,12 @@ const TikTokSettings: FC<{
       >
         <option value="">{t('select', 'Select')}</option>
         {privacyLevel.map((item) => (
-          <option key={item.value} value={item.value}>
-            {item.label}
+          <option
+            key={item.value}
+            value={item.value}
+            disabled={item.value === 'SELF_ONLY' && brand_content_toggle}
+          >
+            {item.label}{item.value === 'SELF_ONLY' && brand_content_toggle ? ` (${t('not_available_for_branded_content', 'not available for branded content')})` : ''}
           </option>
         ))}
       </Select>
@@ -250,11 +256,19 @@ const TikTokSettings: FC<{
         <Checkbox
           variant="hollow"
           label={t('label_branded_content', 'Branded content')}
-          disabled={isUploadMode}
+          disabled={isUploadMode || isPrivate}
           {...register('brand_content_toggle', {
             value: false,
           })}
         />
+        {isPrivate && (
+          <div className="text-[12px] text-red-400 mt-[2px]">
+            {t(
+              'branded_content_cannot_be_private',
+              'Branded content visibility cannot be set to private.'
+            )}
+          </div>
+        )}
         <div className="text-balance my-[10px] text-[14px]">
           {t(
             'you_are_promoting_another_brand',
