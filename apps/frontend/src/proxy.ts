@@ -5,14 +5,13 @@ import { internalFetch } from '@gitroom/helpers/utils/internal.fetch';
 import acceptLanguage from 'accept-language';
 import {
   cookieName,
-  fallbackLng,
   headerName,
   languages,
 } from '@gitroom/react/translation/i18n.config';
 acceptLanguage.languages(languages);
 
 // This function can be marked `async` if using `await` inside
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const nextUrl = request.nextUrl;
   const authCookie =
     request.cookies.get('auth') ||
@@ -25,7 +24,16 @@ export async function middleware(request: NextRequest) {
           request.headers.get('accept-language')
       );
 
-  const topResponse = NextResponse.next();
+  const requestHeaders = new Headers(request.headers);
+  if (lng) {
+    requestHeaders.set(headerName, lng);
+  }
+
+  const topResponse = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 
   if (lng) {
     topResponse.headers.set(cookieName, lng);
@@ -73,9 +81,16 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
+  if (
+    nextUrl.pathname.startsWith('/auth/register') &&
+    process.env.DISABLE_REGISTRATION === 'true'
+  ) {
+    return NextResponse.redirect(new URL('/auth/login', nextUrl.href));
+  }
+
   const org = nextUrl.searchParams.get('org');
   const url = new URL(nextUrl).search;
-  if (nextUrl.href.indexOf('/auth') === -1 && !authCookie) {
+  if (!nextUrl.pathname.startsWith('/auth') && !authCookie) {
     const providers = ['google', 'settings'];
     const findIndex = providers.find((p) => nextUrl.href.indexOf(p) > -1);
     const additional = !findIndex
@@ -93,10 +108,10 @@ export async function middleware(request: NextRequest) {
   }
 
   // If the url is /auth and the cookie exists, redirect to /
-  if (nextUrl.href.indexOf('/auth') > -1 && authCookie) {
+  if (nextUrl.pathname.startsWith('/auth') && authCookie) {
     return NextResponse.redirect(new URL(`/${url}`, nextUrl.href));
   }
-  if (nextUrl.href.indexOf('/auth') > -1 && !authCookie) {
+  if (nextUrl.pathname.startsWith('/auth') && !authCookie) {
     if (org) {
       const redirect = NextResponse.redirect(new URL(`/`, nextUrl.href));
       redirect.cookies.set('org', org, {

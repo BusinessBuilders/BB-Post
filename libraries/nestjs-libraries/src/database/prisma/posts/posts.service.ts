@@ -18,6 +18,7 @@ import utc from 'dayjs/plugin/utc';
 import { MediaService } from '@gitroom/nestjs-libraries/database/prisma/media/media.service';
 import { ShortLinkService } from '@gitroom/nestjs-libraries/short-linking/short.link.service';
 import { CreateTagDto } from '@gitroom/nestjs-libraries/dtos/posts/create.tag.dto';
+import { minifyPostsList, minifyPosts } from '@gitroom/helpers/utils/posts.list.minify';
 import axios from 'axios';
 import sharp from 'sharp';
 import { UploadFactory } from '@gitroom/nestjs-libraries/upload/upload.factory';
@@ -64,15 +65,83 @@ export class PostsService {
     return this._postRepository.updatePost(id, postId, releaseURL);
   }
 
+  async getMissingContent(
+    orgId: string,
+    postId: string,
+    forceRefresh = false
+  ): Promise<{ id: string; url: string }[]> {
+    const post = await this._postRepository.getPostById(postId, orgId);
+    if (!post || post.releaseId !== 'missing') {
+      return [];
+    }
+
+    const integrationProvider = this._integrationManager.getSocialIntegration(
+      post.integration.providerIdentifier
+    );
+
+    if (!integrationProvider.missing) {
+      return [];
+    }
+
+    const getIntegration = post.integration!;
+
+    if (
+      dayjs(getIntegration?.tokenExpiration).isBefore(dayjs()) ||
+      forceRefresh
+    ) {
+      const data = await this._refreshIntegrationService.refresh(
+        getIntegration
+      );
+      if (!data) {
+        return [];
+      }
+
+      const { accessToken } = data;
+
+      if (accessToken) {
+        getIntegration.token = accessToken;
+
+        if (integrationProvider.refreshWait) {
+          await timer(10000);
+        }
+      } else {
+        await this._integrationService.disconnectChannel(orgId, getIntegration);
+        return [];
+      }
+    }
+
+    try {
+      return await integrationProvider.missing(
+        getIntegration.internalId,
+        getIntegration.token
+      );
+    } catch (e) {
+      console.log(e);
+      if (e instanceof RefreshToken) {
+        return this.getMissingContent(orgId, postId, true);
+      }
+    }
+
+    return [];
+  }
+
+  async updateReleaseId(orgId: string, postId: string, releaseId: string) {
+    return this._postRepository.updateReleaseId(postId, orgId, releaseId);
+  }
+
   async checkPostAnalytics(
     orgId: string,
     postId: string,
     date: number,
     forceRefresh = false
-  ): Promise<AnalyticsData[]> {
+  ): Promise<AnalyticsData[] | { missing: true }> {
     const post = await this._postRepository.getPostById(postId, orgId);
     if (!post || !post.releaseId) {
       return [];
+    }
+
+    if (post.releaseId === 'missing') {
+      return { missing: true };
     }
 
     const integrationProvider = this._integrationManager.getSocialIntegration(
@@ -240,8 +309,16 @@ export class PostsService {
     return this._postRepository.getPosts(orgId, query);
   }
 
+  async getPostsMinified(orgId: string, query: GetPostsDto) {
+    return minifyPosts({
+      posts: await this._postRepository.getPosts(orgId, query),
+    });
+  }
+
   async getPostsList(orgId: string, query: GetPostsListDto) {
-    return this._postRepository.getPostsList(orgId, query);
+    return minifyPostsList(
+      await this._postRepository.getPostsList(orgId, query)
+    );
   }
 
   async updateMedia(id: string, imagesList: any[], convertToJPEG = false) {
@@ -341,6 +418,53 @@ export class PostsService {
     } catch (err: any) {
       return imagesList;
     }
+  }
+
+  async getPostGroupDebugExport(orgId: string, group: string) {
+    const loadAll = await this._postRepository.getPostsByGroup(orgId, group);
+    const errors = await this._postRepository.getErrorsByPostIds(
+      loadAll.map((p) => p.id)
+    );
+    const posts = this.arrangePostsByGroup(loadAll, undefined);
+    const rootPost = posts[0] as any;
+
+    return {
+      type: 'draft' as const,
+      shortLink: false,
+      date: rootPost.publishDate.toISOString(),
+      tags:
+        rootPost.tags?.map((t: any) => ({
+          value: t.tag.id,
+          label: t.tag.name,
+        })) || [],
+      posts: [
+        {
+          integration: { id: 'REPLACE_WITH_LOCAL_INTEGRATION_ID' },
+          group: rootPost.group,
+          settings: JSON.parse(rootPost.settings || '{}'),
+          value: posts.map((post) => ({
+            content: post.content,
+            image: JSON.parse(post.image || '[]'),
+            delay: post.delay || 0,
+          })),
+        },
+      ],
+      _debug: {
+        providerIdentifier: rootPost.integration?.providerIdentifier,
+        providerName: rootPost.integration?.name,
+        state: rootPost.state,
+        error: rootPost.error,
+        errors: errors.map((e) => ({
+          message: e.message,
+          platform: e.platform,
+          body: e.body,
+          createdAt: e.createdAt,
+        })),
+        originalGroup: group,
+        originalPublishDate: rootPost.publishDate,
+        exportedAt: new Date().toISOString(),
+      },
+    };
   }
 
   async getPostsByGroup(orgId: string, group: string) {

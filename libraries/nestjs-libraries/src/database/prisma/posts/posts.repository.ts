@@ -224,9 +224,6 @@ export class PostsRepository {
             {
               organizationId: orgId,
             },
-            {
-              submittedForOrganizationId: orgId,
-            },
           ],
         },
         {
@@ -372,6 +369,19 @@ export class PostsRepository {
     });
   }
 
+  updateReleaseId(id: string, orgId: string, releaseId: string) {
+    return this._post.model.post.update({
+      where: {
+        id,
+        organizationId: orgId,
+        releaseId: 'missing',
+      },
+      data: {
+        releaseId: String(releaseId),
+      },
+    });
+  }
+
   async changeState(id: string, state: State, err?: any, body?: any) {
     const update = await this._post.model.post.update({
       where: {
@@ -407,6 +417,15 @@ export class PostsRepository {
     }
 
     return update;
+  }
+
+  getErrorsByPostIds(postIds: string[]) {
+    return this._errors.model.errors.findMany({
+      where: {
+        postId: { in: postIds },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
   async changeDate(

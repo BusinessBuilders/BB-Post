@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
   Param,
   Post,
   Put,
@@ -43,6 +44,23 @@ export class PostsController {
     @Param('id') id: string
   ) {
     return this._postsService.getStatistics(org.id, id);
+  }
+
+  @Get('/:id/missing')
+  async getMissingContent(
+    @GetOrgFromRequest() org: Organization,
+    @Param('id') id: string
+  ) {
+    return this._postsService.getMissingContent(org.id, id);
+  }
+
+  @Put('/:id/release-id')
+  async updateReleaseId(
+    @GetOrgFromRequest() org: Organization,
+    @Param('id') id: string,
+    @Body('releaseId') releaseId: string
+  ) {
+    return this._postsService.updateReleaseId(org.id, id, releaseId);
   }
 
   @Post('/should-shortlink')
@@ -95,11 +113,7 @@ export class PostsController {
     @GetOrgFromRequest() org: Organization,
     @Query() query: GetPostsDto
   ) {
-    const posts = await this._postsService.getPosts(org.id, query);
-
-    return {
-      posts,
-    };
+    return this._postsService.getPostsMinified(org.id, query);
   }
 
   @Get('/find-slot')
@@ -129,6 +143,18 @@ export class PostsController {
     @Query('date') date: string
   ) {
     return this._postsService.getOldPosts(org.id, date);
+  }
+
+  @Get('/group/:group/debug-export')
+  async getPostGroupDebugExport(
+    @GetOrgFromRequest() org: Organization,
+    @GetUserFromRequest() user: User,
+    @Param('group') group: string
+  ) {
+    if (!user.isSuperAdmin) {
+      throw new HttpException('Forbidden', 403);
+    }
+    return this._postsService.getPostGroupDebugExport(org.id, group);
   }
 
   @Get('/group/:group')

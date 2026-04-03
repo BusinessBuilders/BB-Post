@@ -69,7 +69,7 @@ export const Menu: FC<{
   const ref = useClickOutside<HTMLDivElement>(() => {
     setShow(false);
   });
-  const showRef = useRef();
+  const showRef = useRef(undefined);
 
   // Adjust menu position if it would overflow viewport
   useLayoutEffect(() => {
@@ -504,7 +504,7 @@ export const Menu: FC<{
                 </svg>
               </div>
               <div className="text-[14px]">
-                {t('change_bot', 'Change Bot')}
+                {t('change_bot', 'Change Bot')}{' '}
                 {[
                   canChangeProfilePicture && t('picture', 'Picture'),
                   canChangeNickName && t('label_nickname', 'Nickname'),
