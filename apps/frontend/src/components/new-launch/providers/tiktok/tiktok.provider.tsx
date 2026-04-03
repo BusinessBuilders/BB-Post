@@ -235,12 +235,16 @@ const TikTokSettings: FC<{
         <div className="text-balance my-[10px] text-[14px]">
           {t(
             'you_are_promoting_yourself',
-            'You are promoting yourself or your own brand.'
+            'You are promoting yourself or your own business.'
           )}
-          <br />
-          {t(
-            'this_video_will_be_classified_brand_organic',
-            'This video will be classified as Brand Organic.'
+          {brand_organic_toggle && !brand_content_toggle && (
+            <>
+              <br />
+              {t(
+                'your_content_will_be_labeled_promotional',
+                'Your photo/video will be labeled as "Promotional content".'
+              )}
+            </>
           )}
         </div>
         <Checkbox
@@ -256,10 +260,14 @@ const TikTokSettings: FC<{
             'you_are_promoting_another_brand',
             'You are promoting another brand or a third party.'
           )}
-          <br />
-          {t(
-            'this_video_will_be_classified_branded_content',
-            'This video will be classified as Branded Content.'
+          {brand_content_toggle && (
+            <>
+              <br />
+              {t(
+                'your_content_will_be_labeled_paid_partnership',
+                'Your photo/video will be labeled as "Paid partnership".'
+              )}
+            </>
           )}
         </div>
         {(brand_organic_toggle || brand_content_toggle) && (
@@ -267,19 +275,9 @@ const TikTokSettings: FC<{
             {t(
               'by_posting_you_agree_to_tiktoks',
               "By posting, you agree to TikTok's"
-            )}
-            {[
-              brand_organic_toggle || brand_content_toggle ? (
-                <a
-                  target="_blank"
-                  className="text-[#B69DEC] hover:underline"
-                  href="https://www.tiktok.com/legal/page/global/music-usage-confirmation/en"
-                >
-                  {t('music_usage_confirmation', 'Music Usage Confirmation')}
-                </a>
-              ) : undefined,
-              brand_content_toggle ? <> {t('and', 'and')} </> : undefined,
-              brand_content_toggle ? (
+            )}{' '}
+            {brand_content_toggle ? (
+              <>
                 <a
                   target="_blank"
                   className="text-[#B69DEC] hover:underline"
@@ -287,8 +285,24 @@ const TikTokSettings: FC<{
                 >
                   {t('branded_content_policy', 'Branded Content Policy')}
                 </a>
-              ) : undefined,
-            ].filter((f) => f)}
+                {' '}{t('and', 'and')}{' '}
+                <a
+                  target="_blank"
+                  className="text-[#B69DEC] hover:underline"
+                  href="https://www.tiktok.com/legal/page/global/music-usage-confirmation/en"
+                >
+                  {t('music_usage_confirmation', 'Music Usage Confirmation')}
+                </a>
+              </>
+            ) : (
+              <a
+                target="_blank"
+                className="text-[#B69DEC] hover:underline"
+                href="https://www.tiktok.com/legal/page/global/music-usage-confirmation/en"
+              >
+                {t('music_usage_confirmation', 'Music Usage Confirmation')}
+              </a>
+            )}
           </div>
         )}
       </div>
