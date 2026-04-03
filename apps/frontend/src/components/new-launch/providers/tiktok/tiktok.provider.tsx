@@ -2,11 +2,7 @@
 
 import {
   FC,
-  ReactEventHandler,
-  useCallback,
-  useEffect,
   useMemo,
-  useState,
 } from 'react';
 import {
   PostComment,
@@ -15,75 +11,13 @@ import {
 import { TikTokDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/tiktok.dto';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { Select } from '@gitroom/react/form/select';
-import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
 import { Checkbox } from '@gitroom/react/form/checkbox';
 import clsx from 'clsx';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
 import { Input } from '@gitroom/react/form/input';
+import { TiktokPreview } from '@gitroom/frontend/components/new-launch/providers/tiktok/tiktok.preview';
 
-const CheckTikTokValidity: FC<{
-  picture: string;
-}> = (props) => {
-  const { register } = useSettings();
-  const t = useT();
-
-  const func = useCustomProviderFunction();
-  const [maxVideoLength, setMaxVideoLength] = useState(0);
-  const [isValidVideo, setIsValidVideo] = useState<undefined | boolean>(
-    undefined
-  );
-  const registerVideo = register('isValidVideo');
-  const video = useMemo(() => {
-    return props.picture;
-  }, [props.picture]);
-  useEffect(() => {
-    loadStats();
-  }, []);
-  const loadStats = useCallback(async () => {
-    const { maxDurationSeconds } = await func.get('maxVideoLength');
-    // setMaxVideoLength(5);
-    setMaxVideoLength(maxDurationSeconds);
-  }, []);
-  const loadVideo: ReactEventHandler<HTMLVideoElement> = useCallback(
-    (e) => {
-      // @ts-ignore
-      setIsValidVideo(e.target.duration <= maxVideoLength);
-      registerVideo.onChange({
-        target: {
-          name: 'isValidVideo',
-          // @ts-ignore
-          value: String(e.target.duration <= maxVideoLength),
-        },
-      });
-    },
-    [maxVideoLength, registerVideo]
-  );
-  if (!maxVideoLength || !video || video.indexOf('mp4') === -1) {
-    return null;
-  }
-  return (
-    <>
-      {isValidVideo === false && (
-        <div className="text-red-600 my-[20px]">
-          {t(
-            'video_length_is_invalid_must_be_up_to',
-            'Video length is invalid, must be up to'
-          )}
-          {maxVideoLength}
-          {t('seconds', 'seconds')}
-        </div>
-      )}
-      <video
-        controls
-        onLoadedMetadata={loadVideo}
-        className="w-0 h-0 overflow-hidden pointer-events-none"
-      >
-        <source src={video} type="video/mp4" />
-      </video>
-    </>
-  );
-};
 const TikTokSettings: FC<{
   values?: any;
 }> = (props) => {
@@ -91,15 +25,17 @@ const TikTokSettings: FC<{
   const { value } = useIntegration();
   const t = useT();
 
-  const isTitle = useMemo(() => {
-    return value?.[0].image.some((p) => p.path.indexOf('mp4') === -1);
+  const isPhoto = useMemo(() => {
+    return value?.[0]?.image?.some((p) => (p?.path?.indexOf?.('mp4') ?? -1) === -1);
   }, [value]);
 
   const disclose = watch('disclose');
   const brand_organic_toggle = watch('brand_organic_toggle');
   const brand_content_toggle = watch('brand_content_toggle');
   const content_posting_method = watch('content_posting_method');
+  const privacy_level = watch('privacy_level');
   const isUploadMode = content_posting_method === 'UPLOAD';
+  const isPrivate = privacy_level === 'SELF_ONLY';
 
   const privacyLevel = [
     {
@@ -148,20 +84,26 @@ const TikTokSettings: FC<{
 
   return (
     <div className="flex flex-col">
-      {/*<CheckTikTokValidity picture={props?.values?.[0]?.image?.[0]?.path} />*/}
-      {isTitle && <Input label="Title" {...register('title')} maxLength={90} />}
+      <div className="text-[13px] text-customColor18 bg-tableBorder rounded-[8px] p-[10px] mb-[15px]">
+        {t(
+          'tiktok_processing_notice',
+          'After publishing, it may take a few minutes for your content to be processed and visible on your TikTok profile.'
+        )}
+      </div>
+      {isPhoto && <Input label="Title" {...register('title')} maxLength={89} />}
       <Select
         label={t('label_who_can_see_this_video', 'Who can see this video?')}
-        hideErrors={true}
         disabled={isUploadMode}
-        {...register('privacy_level', {
-          value: 'PUBLIC_TO_EVERYONE',
-        })}
+        {...register('privacy_level')}
       >
         <option value="">{t('select', 'Select')}</option>
         {privacyLevel.map((item) => (
-          <option key={item.value} value={item.value}>
-            {item.label}
+          <option
+            key={item.value}
+            value={item.value}
+            disabled={item.value === 'SELF_ONLY' && brand_content_toggle}
+          >
+            {item.label}{item.value === 'SELF_ONLY' && brand_content_toggle ? ` (${t('not_available_for_branded_content', 'not available for branded content')})` : ''}
           </option>
         ))}
       </Select>
@@ -185,8 +127,8 @@ const TikTokSettings: FC<{
           </option>
         ))}
       </Select>
+      {isUploadMode && <div className="-mt-[23px] mb-[23px] text-red-600">After posting you fill find a notification inside your Inbox about your post (not content studio)</div>}
       <Select
-        hideErrors={true}
         label={t('label_auto_add_music', 'Auto add music')}
         {...register('autoAddMusic', {
           value: 'no',
@@ -215,25 +157,29 @@ const TikTokSettings: FC<{
           variant="hollow"
           disabled={isUploadMode}
           {...register('comment', {
-            value: true,
-          })}
-        />
-        <Checkbox
-          variant="hollow"
-          label={t('label_duet', 'Duet')}
-          disabled={isUploadMode}
-          {...register('duet', {
             value: false,
           })}
         />
-        <Checkbox
-          label={t('label_stitch', 'Stitch')}
-          variant="hollow"
-          disabled={isUploadMode}
-          {...register('stitch', {
-            value: false,
-          })}
-        />
+        {!isPhoto && (
+          <Checkbox
+            variant="hollow"
+            label={t('label_duet', 'Duet')}
+            disabled={isUploadMode}
+            {...register('duet', {
+              value: false,
+            })}
+          />
+        )}
+        {!isPhoto && (
+          <Checkbox
+            label={t('label_stitch', 'Stitch')}
+            variant="hollow"
+            disabled={isUploadMode}
+            {...register('stitch', {
+              value: false,
+            })}
+          />
+        )}
       </div>
       <hr className="my-[15px] mb-[25px] border-tableBorder" />
       <div className="flex flex-col gap-[20px]">
@@ -288,7 +234,7 @@ const TikTokSettings: FC<{
           )}
         </div>
       </div>
-      <div className={clsx(!disclose && 'invisible', 'mt-[20px]')}>
+      <div className={clsx(!disclose && 'invisible h-0 overflow-hidden', 'mt-[20px]')}>
         <Checkbox
           variant="hollow"
           label={t('label_your_brand', 'Your brand')}
@@ -300,31 +246,47 @@ const TikTokSettings: FC<{
         <div className="text-balance my-[10px] text-[14px]">
           {t(
             'you_are_promoting_yourself',
-            'You are promoting yourself or your own brand.'
+            'You are promoting yourself or your own business.'
           )}
-          <br />
-          {t(
-            'this_video_will_be_classified_brand_organic',
-            'This video will be classified as Brand Organic.'
+          {brand_organic_toggle && !brand_content_toggle && (
+            <>
+              <br />
+              {t(
+                'your_content_will_be_labeled_promotional',
+                'Your photo/video will be labeled as "Promotional content".'
+              )}
+            </>
           )}
         </div>
         <Checkbox
           variant="hollow"
           label={t('label_branded_content', 'Branded content')}
-          disabled={isUploadMode}
+          disabled={isUploadMode || isPrivate}
           {...register('brand_content_toggle', {
             value: false,
           })}
         />
+        {isPrivate && (
+          <div className="text-[12px] text-red-400 mt-[2px]">
+            {t(
+              'branded_content_cannot_be_private',
+              'Branded content visibility cannot be set to private.'
+            )}
+          </div>
+        )}
         <div className="text-balance my-[10px] text-[14px]">
           {t(
             'you_are_promoting_another_brand',
             'You are promoting another brand or a third party.'
           )}
-          <br />
-          {t(
-            'this_video_will_be_classified_branded_content',
-            'This video will be classified as Branded Content.'
+          {brand_content_toggle && (
+            <>
+              <br />
+              {t(
+                'your_content_will_be_labeled_paid_partnership',
+                'Your photo/video will be labeled as "Paid partnership".'
+              )}
+            </>
           )}
         </div>
         {(brand_organic_toggle || brand_content_toggle) && (
@@ -332,19 +294,9 @@ const TikTokSettings: FC<{
             {t(
               'by_posting_you_agree_to_tiktoks',
               "By posting, you agree to TikTok's"
-            )}
-            {[
-              brand_organic_toggle || brand_content_toggle ? (
-                <a
-                  target="_blank"
-                  className="text-[#B69DEC] hover:underline"
-                  href="https://www.tiktok.com/legal/page/global/music-usage-confirmation/en"
-                >
-                  {t('music_usage_confirmation', 'Music Usage Confirmation')}
-                </a>
-              ) : undefined,
-              brand_content_toggle ? <> {t('and', 'and')} </> : undefined,
-              brand_content_toggle ? (
+            )}{' '}
+            {brand_content_toggle ? (
+              <>
                 <a
                   target="_blank"
                   className="text-[#B69DEC] hover:underline"
@@ -352,11 +304,42 @@ const TikTokSettings: FC<{
                 >
                   {t('branded_content_policy', 'Branded Content Policy')}
                 </a>
-              ) : undefined,
-            ].filter((f) => f)}
+                {' '}{t('and', 'and')}{' '}
+                <a
+                  target="_blank"
+                  className="text-[#B69DEC] hover:underline"
+                  href="https://www.tiktok.com/legal/page/global/music-usage-confirmation/en"
+                >
+                  {t('music_usage_confirmation', 'Music Usage Confirmation')}
+                </a>
+              </>
+            ) : (
+              <a
+                target="_blank"
+                className="text-[#B69DEC] hover:underline"
+                href="https://www.tiktok.com/legal/page/global/music-usage-confirmation/en"
+              >
+                {t('music_usage_confirmation', 'Music Usage Confirmation')}
+              </a>
+            )}
           </div>
         )}
       </div>
+      {!disclose && (
+        <div className="my-[10px] text-[14px] text-balance">
+          {t(
+            'by_posting_you_agree_to_tiktoks',
+            "By posting, you agree to TikTok's"
+          )}{' '}
+          <a
+            target="_blank"
+            className="text-[#B69DEC] hover:underline"
+            href="https://www.tiktok.com/legal/page/global/music-usage-confirmation/en"
+          >
+            {t('music_usage_confirmation', 'Music Usage Confirmation')}
+          </a>
+        </div>
+      )}
     </div>
   );
 };
@@ -364,26 +347,30 @@ export default withProvider({
   postComment: PostComment.COMMENT,
   minimumCharacters: [],
   SettingsComponent: TikTokSettings,
-  CustomPreviewComponent: undefined,
+  comments: false,
+  CustomPreviewComponent: TiktokPreview,
   dto: TikTokDto,
-  checkValidity: async (items) => {
-    const [firstItems] = items;
-    if (items.length !== 1) {
-      return 'Should have one item';
-    }
-    if (firstItems.length === 0) {
+  checkValidity: async (items, settings) => {
+    const [firstItems] = items ?? [];
+    if ((firstItems?.length ?? 0) === 0) {
       return 'No video / images selected';
     }
     if (
-      firstItems.length > 1 &&
-      firstItems?.some((p) => p?.path?.indexOf('mp4') > -1)
+      (firstItems?.length ?? 0) > 1 &&
+      firstItems?.some((p) => (p?.path?.indexOf?.('mp4') ?? -1) > -1)
     ) {
       return 'Only pictures are supported when selecting multiple items';
     } else if (
       firstItems?.length !== 1 &&
-      firstItems?.[0]?.path?.indexOf('mp4') > -1
+      (firstItems?.[0]?.path?.indexOf?.('mp4') ?? -1) > -1
     ) {
       return 'You need one media';
+    }
+    if ((settings as any).disclose && !(settings as any).brand_organic_toggle && !(settings as any).brand_content_toggle) {
+      return 'You need to indicate if your content promotes yourself, a third party, or both.';
+    }
+    if (!settings.privacy_level) {
+      return 'Please select a privacy level';
     }
     return true;
   },

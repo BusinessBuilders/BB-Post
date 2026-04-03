@@ -6,7 +6,7 @@ import { Button } from '@gitroom/react/form/button';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { Subscription } from '@prisma/client';
 import { useDebouncedCallback } from 'use-debounce';
-import ReactLoading from 'react-loading';
+import ReactLoading from '@gitroom/frontend/components/layout/loading';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import dayjs from 'dayjs';
@@ -18,17 +18,17 @@ import { useUser } from '@gitroom/frontend/components/layout/user.context';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { TopTitle } from '@gitroom/frontend/components/launches/helpers/top.title.component';
 import { Textarea } from '@gitroom/react/form/textarea';
 import { useFireEvents } from '@gitroom/helpers/utils/use.fire.events';
 import { useUtmUrl } from '@gitroom/helpers/utils/utm.saver';
-import { useTolt } from '@gitroom/frontend/components/layout/tolt.script';
 import { useTrack } from '@gitroom/react/helpers/use.track';
 import { TrackEnum } from '@gitroom/nestjs-libraries/user/track.enum';
 import { PurchaseCrypto } from '@gitroom/frontend/components/billing/purchase.crypto';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { FinishTrial } from '@gitroom/frontend/components/billing/finish.trial';
 import { newDayjs } from '@gitroom/frontend/components/layout/set.timezone';
+import { useDubClickId } from '@gitroom/frontend/components/layout/dubAnalytics';
+import { LogoutComponent } from '@gitroom/frontend/components/layout/logout.component';
 
 export const Prorate: FC<{
   period: 'MONTHLY' | 'YEARLY';
@@ -218,10 +218,10 @@ export const MainBillingComponent: FC<{
   const fetch = useFetch();
   const toast = useToaster();
   const user = useUser();
+  const dub = useDubClickId();
   const modal = useModals();
   const router = useRouter();
   const utm = useUtmUrl();
-  const tolt = useTolt();
   const track = useTrack();
   const t = useT();
   const queryParams = useSearchParams();
@@ -387,7 +387,7 @@ export const MainBillingComponent: FC<{
               period: monthlyOrYearly === 'on' ? 'YEARLY' : 'MONTHLY',
               utm,
               billing,
-              tolt: tolt(),
+              ...(dub ? { dub } : {}),
             }),
           })
         ).json();
@@ -573,6 +573,9 @@ export const MainBillingComponent: FC<{
         </div>
       )}
       <FAQComponent />
+      <div className="flex justify-center mt-[20px]">
+        <LogoutComponent />
+      </div>
     </div>
   );
 };

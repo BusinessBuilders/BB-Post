@@ -7,6 +7,7 @@ import {
 } from '@gitroom/nestjs-libraries/integrations/social/social.integrations.interface';
 import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
 import axios from 'axios';
+// @ts-ignore
 import FormData from 'form-data';
 import { SocialAbstract } from '@gitroom/nestjs-libraries/integrations/social.abstract';
 import { DribbbleDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/dribbble.dto';
@@ -186,5 +187,15 @@ export class DribbbleProvider extends SocialAbstract implements SocialProvider {
     date: number
   ): Promise<AnalyticsData[]> {
     return Promise.resolve([]);
+  }
+
+  async postAnalytics(
+    integrationId: string,
+    accessToken: string,
+    postId: string,
+    date: number
+  ): Promise<AnalyticsData[]> {
+    // Dribbble doesn't provide detailed post-level analytics via their API
+    return [];
   }
 }
