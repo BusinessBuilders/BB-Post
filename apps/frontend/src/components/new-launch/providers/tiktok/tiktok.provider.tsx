@@ -345,7 +345,7 @@ export default withProvider({
   comments: false,
   CustomPreviewComponent: TiktokPreview,
   dto: TikTokDto,
-  checkValidity: async (items) => {
+  checkValidity: async (items, settings) => {
     const [firstItems] = items ?? [];
     if ((firstItems?.length ?? 0) === 0) {
       return 'No video / images selected';
@@ -360,6 +360,12 @@ export default withProvider({
       (firstItems?.[0]?.path?.indexOf?.('mp4') ?? -1) > -1
     ) {
       return 'You need one media';
+    }
+    if ((settings as any).disclose && !(settings as any).brand_organic_toggle && !(settings as any).brand_content_toggle) {
+      return 'You need to indicate if your content promotes yourself, a third party, or both.';
+    }
+    if (!settings.privacy_level) {
+      return 'Please select a privacy level';
     }
     return true;
   },
