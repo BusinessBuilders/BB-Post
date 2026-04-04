@@ -29,7 +29,6 @@ export class LinkedinPageProvider
     'openid',
     'profile',
     'w_member_social',
-    'r_basicprofile',
     'rw_organization_admin',
     'w_organization_social',
     'r_organization_social',
@@ -53,8 +52,8 @@ export class LinkedinPageProvider
         body: new URLSearchParams({
           grant_type: 'refresh_token',
           refresh_token,
-          client_id: process.env.LINKEDIN_CLIENT_ID!,
-          client_secret: process.env.LINKEDIN_CLIENT_SECRET!,
+          client_id: (process.env.LINKEDIN_PAGE_CLIENT_ID || process.env.LINKEDIN_CLIENT_ID)!,
+          client_secret: (process.env.LINKEDIN_PAGE_CLIENT_SECRET || process.env.LINKEDIN_CLIENT_SECRET)!,
         }),
       })
     ).json();
@@ -90,6 +89,21 @@ export class LinkedinPageProvider
     };
   }
 
+  override async addComment(
+    integration: Integration,
+    originalIntegration: Integration,
+    postId: string,
+    information: any,
+  ) {
+    return super.addComment(
+      integration,
+      originalIntegration,
+      postId,
+      information,
+      false
+    );
+  }
+
   override async repostPostUsers(
     integration: Integration,
     originalIntegration: Integration,
@@ -109,7 +123,7 @@ export class LinkedinPageProvider
     const state = makeId(6);
     const codeVerifier = makeId(30);
     const url = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&prompt=none&client_id=${
-      process.env.LINKEDIN_CLIENT_ID
+      process.env.LINKEDIN_PAGE_CLIENT_ID || process.env.LINKEDIN_CLIENT_ID
     }&redirect_uri=${encodeURIComponent(
       `${process.env.FRONTEND_URL}/integrations/social/linkedin-page`
     )}&state=${state}&scope=${encodeURIComponent(this.scopes.join(' '))}`;
@@ -128,7 +142,7 @@ export class LinkedinPageProvider
           headers: {
             Authorization: `Bearer ${accessToken}`,
             'X-Restli-Protocol-Version': '2.0.0',
-            'LinkedIn-Version': '202501',
+            'LinkedIn-Version': '202601',
           },
         }
       )
@@ -198,8 +212,8 @@ export class LinkedinPageProvider
       'redirect_uri',
       `${process.env.FRONTEND_URL}/integrations/social/linkedin-page`
     );
-    body.append('client_id', process.env.LINKEDIN_CLIENT_ID!);
-    body.append('client_secret', process.env.LINKEDIN_CLIENT_SECRET!);
+    body.append('client_id', (process.env.LINKEDIN_PAGE_CLIENT_ID || process.env.LINKEDIN_CLIENT_ID)!);
+    body.append('client_secret', (process.env.LINKEDIN_PAGE_CLIENT_SECRET || process.env.LINKEDIN_CLIENT_SECRET)!);
 
     const {
       access_token: accessToken,
@@ -258,6 +272,25 @@ export class LinkedinPageProvider
     return super.post(id, accessToken, postDetails, integration, 'company');
   }
 
+  override async comment(
+    id: string,
+    postId: string,
+    lastCommentId: string | undefined,
+    accessToken: string,
+    postDetails: PostDetails[],
+    integration: Integration
+  ): Promise<PostResponse[]> {
+    return super.comment(
+      id,
+      postId,
+      lastCommentId,
+      accessToken,
+      postDetails,
+      integration,
+      'company'
+    );
+  }
+
   async analytics(
     id: string,
     accessToken: string,
@@ -274,7 +307,7 @@ export class LinkedinPageProvider
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Linkedin-Version': '202405',
+            'Linkedin-Version': '202601',
             'X-Restli-Protocol-Version': '2.0.0',
           },
         }
@@ -289,7 +322,7 @@ export class LinkedinPageProvider
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Linkedin-Version': '202405',
+            'Linkedin-Version': '202601',
             'X-Restli-Protocol-Version': '2.0.0',
           },
         }
@@ -304,7 +337,7 @@ export class LinkedinPageProvider
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Linkedin-Version': '202405',
+            'Linkedin-Version': '202601',
             'X-Restli-Protocol-Version': '2.0.0',
           },
         }
@@ -383,6 +416,132 @@ export class LinkedinPageProvider
     }));
   }
 
+  async postAnalytics(
+    integrationId: string,
+    accessToken: string,
+    postId: string,
+    date: number
+  ): Promise<AnalyticsData[]> {
+    const endDate = dayjs().unix() * 1000;
+    const startDate = dayjs().subtract(date, 'days').unix() * 1000;
+
+    // Fetch share statistics for the specific post
+    const shareStatsUrl = `https://api.linkedin.com/v2/organizationalEntityShareStatistics?q=organizationalEntity&organizationalEntity=${encodeURIComponent(
+      `urn:li:organization:${integrationId}`
+    )}&shares=List(${encodeURIComponent(postId)})&timeIntervals=(timeRange:(start:${startDate},end:${endDate}),timeGranularityType:DAY)`;
+
+    const { elements: shareElements }: { elements: PostShareStatElement[] } =
+      await (
+        await this.fetch(shareStatsUrl, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'LinkedIn-Version': '202601',
+            'X-Restli-Protocol-Version': '2.0.0',
+          },
+        })
+      ).json();
+
+    // Also fetch social actions (likes, comments, shares) for the specific post
+    let socialActions: SocialActionsResponse | null = null;
+    try {
+      const socialActionsUrl = `https://api.linkedin.com/v2/socialActions/${encodeURIComponent(
+        postId
+      )}`;
+      socialActions = await (
+        await this.fetch(socialActionsUrl, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'LinkedIn-Version': '202601',
+            'X-Restli-Protocol-Version': '2.0.0',
+          },
+        })
+      ).json();
+    } catch (e) {
+      // Social actions may not be available for all posts
+    }
+
+    // Process share statistics into time series data
+    const analytics = (shareElements || []).reduce(
+      (all, current) => {
+        if (typeof current?.totalShareStatistics !== 'undefined') {
+          const dateStr = dayjs(current.timeRange.start).format('YYYY-MM-DD');
+
+          all['Impressions'].push({
+            total: current.totalShareStatistics.impressionCount || 0,
+            date: dateStr,
+          });
+
+          all['Unique Impressions'].push({
+            total: current.totalShareStatistics.uniqueImpressionsCount || 0,
+            date: dateStr,
+          });
+
+          all['Clicks'].push({
+            total: current.totalShareStatistics.clickCount || 0,
+            date: dateStr,
+          });
+
+          all['Likes'].push({
+            total: current.totalShareStatistics.likeCount || 0,
+            date: dateStr,
+          });
+
+          all['Comments'].push({
+            total: current.totalShareStatistics.commentCount || 0,
+            date: dateStr,
+          });
+
+          all['Shares'].push({
+            total: current.totalShareStatistics.shareCount || 0,
+            date: dateStr,
+          });
+
+          all['Engagement'].push({
+            total: current.totalShareStatistics.engagement || 0,
+            date: dateStr,
+          });
+        }
+        return all;
+      },
+      {
+        Impressions: [] as { total: number; date: string }[],
+        'Unique Impressions': [] as { total: number; date: string }[],
+        Clicks: [] as { total: number; date: string }[],
+        Likes: [] as { total: number; date: string }[],
+        Comments: [] as { total: number; date: string }[],
+        Shares: [] as { total: number; date: string }[],
+        Engagement: [] as { total: number; date: string }[],
+      }
+    );
+
+    // If no time series data but we have social actions, create a single data point
+    if (
+      Object.values(analytics).every((arr) => arr.length === 0) &&
+      socialActions
+    ) {
+      const today = dayjs().format('YYYY-MM-DD');
+      analytics['Likes'].push({
+        total: socialActions.likesSummary?.totalLikes || 0,
+        date: today,
+      });
+      analytics['Comments'].push({
+        total: socialActions.commentsSummary?.totalFirstLevelComments || 0,
+        date: today,
+      });
+    }
+
+    // Filter out empty analytics
+    const result = Object.entries(analytics)
+      .filter(([_, data]) => data.length > 0)
+      .map(([label, data]) => ({
+        label,
+        data,
+        percentageChange: 0,
+      }));
+
+    return result as any;
+  }
+
   @Plug({
     identifier: 'linkedin-page-autoRepostPost',
     title: 'Auto Repost Posts',
@@ -415,7 +574,7 @@ export class LinkedinPageProvider
           headers: {
             'X-Restli-Protocol-Version': '2.0.0',
             'Content-Type': 'application/json',
-            'LinkedIn-Version': '202501',
+            'LinkedIn-Version': '202601',
             Authorization: `Bearer ${integration.token}`,
           },
         }
@@ -444,7 +603,7 @@ export class LinkedinPageProvider
         headers: {
           'X-Restli-Protocol-Version': '2.0.0',
           'Content-Type': 'application/json',
-          'LinkedIn-Version': '202504',
+          'LinkedIn-Version': '202601',
           Authorization: `Bearer ${integration.token}`,
         },
       });
@@ -493,7 +652,7 @@ export class LinkedinPageProvider
           headers: {
             'X-Restli-Protocol-Version': '2.0.0',
             'Content-Type': 'application/json',
-            'LinkedIn-Version': '202501',
+            'LinkedIn-Version': '202601',
             Authorization: `Bearer ${integration.token}`,
           },
         }
@@ -729,4 +888,31 @@ export interface MobileInsightsPageViews {
 export interface TimeRange {
   start: number;
   end: number;
+}
+
+// Post analytics interfaces
+export interface PostShareStatElement {
+  organizationalEntity: string;
+  share: string;
+  totalShareStatistics: {
+    uniqueImpressionsCount: number;
+    shareCount: number;
+    engagement: number;
+    clickCount: number;
+    likeCount: number;
+    impressionCount: number;
+    commentCount: number;
+  };
+  timeRange: TimeRange;
+}
+
+export interface SocialActionsResponse {
+  likesSummary?: {
+    totalLikes: number;
+    likedByCurrentUser: boolean;
+  };
+  commentsSummary?: {
+    totalFirstLevelComments: number;
+    commentsState: string;
+  };
 }

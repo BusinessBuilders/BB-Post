@@ -1,0 +1,98 @@
+{
+  "IMPORTANT": "These are INSTAGRAM BUSINESS API calls - NOT regular Instagram API",
+  "APP_ID": "1382909656613877",
+  "INSTAGRAM_BUSINESS_ID": "17841478147973244",
+  "PERMISSIONS_BEING_TESTED": [
+    "instagram_business_content_publish",
+    "instagram_business_manage_comments"
+  ],
+  "GRAPH_API_EXPLORER_SETUP": {
+    "step_1": "Go to https://developers.facebook.com/tools/explorer",
+    "step_2": "Select app: BB Post (1382909656613877)",
+    "step_3": "Click 'Generate Access Token'",
+    "step_4": "CHECK THESE PERMISSIONS:",
+    "permissions": [
+      "instagram_business_basic",
+      "instagram_business_content_publish",
+      "instagram_business_manage_comments",
+      "instagram_business_manage_insights"
+    ],
+    "step_5": "Authorize with William Donovan Instagram Business account"
+  },
+  "API_CALL_1_CREATE_MEDIA": {
+    "permission": "instagram_business_content_publish",
+    "method": "POST",
+    "url_path": "/17841478147973244/media",
+    "json_to_paste_in_json_tab": {
+      "image_url": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
+      "caption": "Testing instagram_business_content_publish permission for Facebook app review! 🚀"
+    },
+    "expected_response": {
+      "id": "SAVE_THIS_MEDIA_CONTAINER_ID"
+    },
+    "next_step": "Wait 30 seconds, then run API_CALL_2"
+  },
+  "API_CALL_2_CHECK_STATUS": {
+    "permission": "instagram_business_content_publish",
+    "method": "GET",
+    "url_path": "/PASTE_MEDIA_ID_HERE?fields=status_code",
+    "json": null,
+    "note": "Replace PASTE_MEDIA_ID_HERE with ID from step 1. Should return status_code: FINISHED"
+  },
+  "API_CALL_3_PUBLISH": {
+    "permission": "instagram_business_content_publish",
+    "method": "POST",
+    "url_path": "/17841478147973244/media_publish",
+    "json_to_paste_in_json_tab": {
+      "creation_id": "PASTE_MEDIA_CONTAINER_ID_FROM_STEP_1"
+    },
+    "expected_response": {
+      "id": "SAVE_THIS_POST_ID_FOR_COMMENTS"
+    },
+    "this_should_trigger": "✅ GREEN CHECKMARK for instagram_business_content_publish"
+  },
+  "API_CALL_4_ADD_COMMENT": {
+    "permission": "instagram_business_manage_comments",
+    "method": "POST",
+    "url_path": "/PASTE_POST_ID_FROM_STEP_3/comments",
+    "json_to_paste_in_json_tab": {
+      "message": "Testing instagram_business_manage_comments permission! This is a comment for app review."
+    },
+    "expected_response": {
+      "id": "COMMENT_ID"
+    },
+    "this_should_trigger": "✅ GREEN CHECKMARK for instagram_business_manage_comments"
+  },
+  "API_CALL_5_ADD_SECOND_COMMENT": {
+    "permission": "instagram_business_manage_comments",
+    "method": "POST",
+    "url_path": "/PASTE_POST_ID_FROM_STEP_3/comments",
+    "json_to_paste_in_json_tab": {
+      "message": "Adding a second comment to demonstrate threaded comments capability for instagram_business_manage_comments"
+    },
+    "note": "Use same post ID from step 3"
+  },
+  "QUICK_COPY_PASTE_JSON": {
+    "CREATE_MEDIA": {
+      "image_url": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
+      "caption": "Testing instagram_business_content_publish! 🚀"
+    },
+    "PUBLISH_MEDIA": {
+      "creation_id": "PASTE_YOUR_MEDIA_ID"
+    },
+    "ADD_COMMENT": {
+      "message": "Testing instagram_business_manage_comments!"
+    }
+  },
+  "STEP_BY_STEP_CHECKLIST": [
+    "1. Open Graph API Explorer",
+    "2. Select BB Post app (1382909656613877)",
+    "3. Generate token with instagram_business_* permissions",
+    "4. POST /17841478147973244/media with CREATE_MEDIA JSON",
+    "5. Wait 30 seconds",
+    "6. GET /MEDIA_ID?fields=status_code (verify FINISHED)",
+    "7. POST /17841478147973244/media_publish with PUBLISH_MEDIA JSON",
+    "8. POST /POST_ID/comments with ADD_COMMENT JSON",
+    "9. Check Facebook App Review page for green checkmarks"
+  ]
+}
