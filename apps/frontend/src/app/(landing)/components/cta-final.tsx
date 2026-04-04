@@ -35,7 +35,7 @@ export function CtaFinal() {
           </Link>
         </div>
         <p className="mt-6 text-xs text-white/30">
-          Open source · AGPL v3 · 27,800+ GitHub Stars · Trusted worldwide
+          Open source · AGPL v3 · Free to self-host · 19+ platforms
         </p>
       </motion.div>
     </section>

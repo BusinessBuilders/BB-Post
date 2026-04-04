@@ -27,7 +27,7 @@ export function Hero() {
         >
           <span className="inline-flex items-center gap-2 bg-[#8B5CF6]/10 border border-[#8B5CF6]/30 rounded-full px-4 py-1.5 text-sm text-[#A78BFA] font-medium">
             <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse" />
-            Open Source · AGPL v3 · 27,800+ GitHub Stars
+            Open Source · AGPL v3 · Free to Self-Host
           </span>
         </motion.div>
 
@@ -82,7 +82,7 @@ export function Hero() {
           transition={{ ...EASE, delay: 0.4 }}
           className="text-sm text-white/40"
         >
-          Free plan available · 7-day trial · Cancel anytime
+          Free plan available · No credit card required
         </motion.p>
 
         {/* Stat row */}
@@ -94,7 +94,7 @@ export function Hero() {
         >
           {[
             { value: '19+', label: 'Platforms' },
-            { value: '27.8k', label: 'GitHub Stars' },
+            { value: 'Free', label: 'Self-Hosted' },
             { value: '100%', label: 'Open Source' },
           ].map(({ value, label }) => (
             <div key={label} className="text-center">

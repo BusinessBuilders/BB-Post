@@ -23,7 +23,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="text-xs text-white/40 hover:text-white border border-white/10 hover:border-white/20 px-3 py-1.5 rounded-lg transition-colors inline-flex"
             >
-              ⭐ 27,800+ Stars
+              ⭐ Star on GitHub
             </Link>
           </div>
 
