@@ -206,24 +206,21 @@ export const FOOTER_COLS = [
     links: [
       { label: 'Features', href: '#features' },
       { label: 'Pricing', href: '#pricing' },
-      { label: 'Changelog', href: 'https://github.com/BusinessBuilders/BB-Post/releases' },
-      { label: 'Roadmap', href: 'https://github.com/BusinessBuilders/BB-Post/issues' },
-      { label: 'Open Source', href: 'https://github.com/BusinessBuilders/BB-Post' },
+      { label: 'Source Code', href: 'https://github.com/BusinessBuilders/BB-Post' },
     ],
   },
   {
     title: 'Resources',
     links: [
-      { label: 'Documentation', href: 'https://docs.business-builder.online' },
-      { label: 'API Reference', href: 'https://docs.business-builder.online/api' },
-      { label: 'Community', href: 'https://github.com/BusinessBuilders/BB-Post/discussions' },
+      { label: 'GitHub Issues', href: 'https://github.com/BusinessBuilders/BB-Post/issues' },
+      { label: 'Postiz Docs', href: 'https://docs.postiz.com' },
     ],
   },
   {
     title: 'Company',
     links: [
       { label: 'GitHub', href: 'https://github.com/BusinessBuilders/BB-Post' },
-      { label: 'Contact', href: 'https://github.com/BusinessBuilders/BB-Post/discussions' },
+      { label: 'Business Builder', href: 'https://business-builder.online' },
     ],
   },
   {

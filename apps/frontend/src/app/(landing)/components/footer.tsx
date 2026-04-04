@@ -74,7 +74,7 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-4">
             <Link href="https://github.com/BusinessBuilders/BB-Post" target="_blank" rel="noopener noreferrer" className="text-xs text-white/30 hover:text-white transition-colors">GitHub</Link>
-            <Link href="https://discord.gg/postiz" target="_blank" rel="noopener noreferrer" className="text-xs text-white/30 hover:text-white transition-colors">Discord</Link>
+            <Link href="https://business-builder.online" target="_blank" rel="noopener noreferrer" className="text-xs text-white/30 hover:text-white transition-colors">Business Builder</Link>
           </div>
         </div>
       </div>
