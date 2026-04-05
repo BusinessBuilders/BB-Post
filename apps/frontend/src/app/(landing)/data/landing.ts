@@ -192,8 +192,8 @@ export const PRICING_TIERS = [
     price: 'Free',
     period: ' forever',
     description: 'Host on your own server. Full control. Open source.',
-    cta: 'View Docs',
-    ctaHref: 'https://docs.business-builder.online',
+    cta: 'View on GitHub',
+    ctaHref: 'https://github.com/BusinessBuilders/BB-Post',
     highlighted: false,
   },
 ] as const;
