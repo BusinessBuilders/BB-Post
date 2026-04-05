@@ -58,7 +58,7 @@ export default function BrandedContentPolicyPage() {
           <p>
             Questions about branded content compliance? Open a discussion on our{' '}
             <a
-              href="https://github.com/BusinessBuilders/BB-Post/discussions"
+              href="https://github.com/BusinessBuilders/BB-Post/issues"
               className="text-[#8B5CF6] hover:underline"
               target="_blank"
               rel="noopener noreferrer"

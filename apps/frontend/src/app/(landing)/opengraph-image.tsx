@@ -80,6 +80,8 @@ export default function Image() {
         {/* Headline */}
         <div
           style={{
+            display: 'flex',
+            flexWrap: 'wrap',
             fontSize: '64px',
             fontWeight: '800',
             color: 'white',
@@ -108,7 +110,7 @@ export default function Image() {
         {/* Stat pills */}
         <div style={{ display: 'flex', gap: '16px' }}>
           {[
-            '27,800+ GitHub Stars',
+            'Open Source',
             '19+ Platforms',
             '100% Open Source',
           ].map((stat) => (

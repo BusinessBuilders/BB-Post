@@ -7,10 +7,9 @@
 // ─── Stats ────────────────────────────────────────────────────────────────────
 
 export const STATS = [
-  { value: '27,800+', label: 'GitHub Stars' },
   { value: '19+', label: 'Social Platforms' },
   { value: '100%', label: 'Open Source (AGPL v3)' },
-  { value: 'Millions', label: 'Posts Scheduled' },
+  { value: 'Free', label: 'Self-Hosted' },
 ] as const;
 
 // ─── Platform Logo Bar ────────────────────────────────────────────────────────
@@ -98,7 +97,7 @@ export const FEATURES = [
     icon: 'Code2',
     body: 'BB Post is fully open source under AGPL v3. Self-host on your own server, contribute to development, or audit the code yourself. No black-box algorithms deciding what happens to your content. You own your data — always.',
     bullets: [
-      'Full source code on GitHub (27,800+ stars)',
+      'Full source code available on GitHub',
       'Self-host on any cloud or on-premise server',
       'Active community of contributors',
       'No vendor lock-in, ever',
@@ -182,7 +181,7 @@ export const PRICING_TIERS = [
     name: 'Pro',
     price: 'See Pricing',
     period: '',
-    description: 'Unlimited accounts, AI features, automation, and team tools. 7-day free trial.',
+    description: 'Unlimited accounts, AI features, automation, and team tools.',
     cta: 'View Pro Plans',
     ctaHref: '/auth',
     highlighted: true,
@@ -193,8 +192,8 @@ export const PRICING_TIERS = [
     price: 'Free',
     period: ' forever',
     description: 'Host on your own server. Full control. Open source.',
-    cta: 'View Docs',
-    ctaHref: 'https://docs.business-builder.online',
+    cta: 'View on GitHub',
+    ctaHref: 'https://github.com/BusinessBuilders/BB-Post',
     highlighted: false,
   },
 ] as const;
@@ -207,24 +206,21 @@ export const FOOTER_COLS = [
     links: [
       { label: 'Features', href: '#features' },
       { label: 'Pricing', href: '#pricing' },
-      { label: 'Changelog', href: 'https://github.com/BusinessBuilders/BB-Post/releases' },
-      { label: 'Roadmap', href: 'https://github.com/BusinessBuilders/BB-Post/issues' },
-      { label: 'Open Source', href: 'https://github.com/BusinessBuilders/BB-Post' },
+      { label: 'Source Code', href: 'https://github.com/BusinessBuilders/BB-Post' },
     ],
   },
   {
     title: 'Resources',
     links: [
-      { label: 'Documentation', href: 'https://docs.business-builder.online' },
-      { label: 'API Reference', href: 'https://docs.business-builder.online/api' },
-      { label: 'Community', href: 'https://github.com/BusinessBuilders/BB-Post/discussions' },
+      { label: 'GitHub Issues', href: 'https://github.com/BusinessBuilders/BB-Post/issues' },
+      { label: 'Postiz Docs', href: 'https://docs.postiz.com' },
     ],
   },
   {
     title: 'Company',
     links: [
       { label: 'GitHub', href: 'https://github.com/BusinessBuilders/BB-Post' },
-      { label: 'Contact', href: 'https://github.com/BusinessBuilders/BB-Post/discussions' },
+      { label: 'Business Builder', href: 'https://business-builder.online' },
     ],
   },
   {
