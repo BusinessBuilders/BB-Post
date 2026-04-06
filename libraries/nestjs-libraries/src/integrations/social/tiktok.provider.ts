@@ -476,7 +476,7 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
                       : {}),
                     ...(isPhoto ? { description: firstPost.message } : {}),
                     privacy_level:
-                      firstPost.settings.privacy_level || 'PUBLIC_TO_EVERYONE',
+                      firstPost.settings.privacy_level,
                     disable_duet: !firstPost.settings.duet || false,
                     disable_comment: !firstPost.settings.comment || false,
                     disable_stitch: !firstPost.settings.stitch || false,
