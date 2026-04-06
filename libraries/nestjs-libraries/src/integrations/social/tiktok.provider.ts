@@ -471,7 +471,7 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
             : {}),
           ...(isPhoto ? { description: firstPost.message } : {}),
           privacy_level:
-            firstPost.settings.privacy_level || 'PUBLIC_TO_EVERYONE',
+            firstPost.settings.privacy_level,
           ...(isPhoto
             ? {}
             : { disable_duet: !firstPost.settings.duet || false }),
@@ -568,6 +568,65 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
           body: JSON.stringify({
             ...this.buildTikokPostInfoBody(firstPost),
             ...this.buildTikokSourceInfoBody(firstPost),
+            ...((firstPost?.settings?.content_posting_method ||
+              'DIRECT_POST') === 'DIRECT_POST'
+              ? {
+                  post_info: {
+                    ...((firstPost?.settings?.title && isPhoto) ||
+                    (firstPost.message && !isPhoto)
+                      ? {
+                          title: isPhoto
+                            ? firstPost.settings.title
+                            : firstPost.message,
+                        }
+                      : {}),
+                    ...(isPhoto ? { description: firstPost.message } : {}),
+                    privacy_level:
+                      firstPost.settings.privacy_level,
+                    disable_duet: !firstPost.settings.duet || false,
+                    disable_comment: !firstPost.settings.comment || false,
+                    disable_stitch: !firstPost.settings.stitch || false,
+                    is_aigc: firstPost.settings.video_made_with_ai || false,
+                    brand_content_toggle:
+                      firstPost.settings.brand_content_toggle || false,
+                    brand_organic_toggle:
+                      firstPost.settings.brand_organic_toggle || false,
+                    ...((firstPost?.media?.[0]?.path?.indexOf('mp4') || -1) ===
+                    -1
+                      ? {
+                          auto_add_music:
+                            firstPost.settings.autoAddMusic === 'yes',
+                        }
+                      : {}),
+                  },
+                }
+              : {}),
+            ...((firstPost?.media?.[0]?.path?.indexOf('mp4') || -1) > -1
+              ? {
+                  source_info: {
+                    source: 'PULL_FROM_URL',
+                    video_url: firstPost?.media?.[0]?.path!,
+                    ...(firstPost?.media?.[0]?.thumbnailTimestamp!
+                      ? {
+                          video_cover_timestamp_ms:
+                            firstPost?.media?.[0]?.thumbnailTimestamp!,
+                        }
+                      : {}),
+                  },
+                }
+              : {
+                  source_info: {
+                    source: 'PULL_FROM_URL',
+                    photo_cover_index: 0,
+                    photo_images: firstPost.media?.map((p) => p.path),
+                  },
+                  post_mode:
+                    firstPost?.settings?.content_posting_method ===
+                    'DIRECT_POST'
+                      ? 'DIRECT_POST'
+                      : 'MEDIA_UPLOAD',
+                  media_type: 'PHOTO',
+                }),
           }),
         }
       )
