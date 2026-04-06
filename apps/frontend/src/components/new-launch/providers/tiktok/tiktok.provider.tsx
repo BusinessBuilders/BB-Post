@@ -87,9 +87,7 @@ const TikTokSettings: FC<{
       <Select
         label={t('label_who_can_see_this_video', 'Who can see this video?')}
         disabled={isUploadMode}
-        {...register('privacy_level', {
-          value: 'PUBLIC_TO_EVERYONE',
-        })}
+        {...register('privacy_level')}
       >
         <option value="">{t('select', 'Select')}</option>
         {privacyLevel.map((item) => (
