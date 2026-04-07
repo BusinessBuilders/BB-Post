@@ -41,7 +41,7 @@ pnpm run prisma-reset        # Reset database (destructive)
 
 ## Architecture Overview
 
-This is an NX monorepo for Postiz, an AI social media scheduling tool.
+This is a Turborepo monorepo for BB Post, Business Builders' AI social media scheduling platform.
 
 ### Apps (`apps/`)
 
