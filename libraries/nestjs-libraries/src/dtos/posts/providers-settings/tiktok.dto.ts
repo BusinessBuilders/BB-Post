@@ -7,6 +7,9 @@ export class TikTokDto {
   @MaxLength(90)
   title: string;
 
+  // Required for Direct Post (TikTok: user must pick it, no default). Not sent
+  // to TikTok for "Upload without posting" - the creator picks it in TikTok.
+  @ValidateIf((p) => p.content_posting_method !== 'UPLOAD')
   @IsIn([
     'PUBLIC_TO_EVERYONE',
     'MUTUAL_FOLLOW_FRIENDS',
@@ -45,4 +48,19 @@ export class TikTokDto {
   @IsIn(['DIRECT_POST', 'UPLOAD'])
   @IsString()
   content_posting_method: 'DIRECT_POST' | 'UPLOAD';
+
+  // Snapshot of the creator_info query the composer was rendered from, used for
+  // client-side validation (privacy option + max video length). The backend
+  // re-queries TikTok before publishing; these are never sent to TikTok.
+  @IsOptional()
+  @IsString()
+  creator_status?: string;
+
+  @IsOptional()
+  @IsString()
+  creator_privacy_options?: string;
+
+  @IsOptional()
+  @IsString()
+  creator_max_video_sec?: string;
 }

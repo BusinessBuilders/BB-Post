@@ -1,9 +1,6 @@
 'use client';
 
-import {
-  FC,
-  useMemo,
-} from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import {
   PostComment,
   withProvider,
@@ -17,13 +14,93 @@ import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
 import { Input } from '@gitroom/react/form/input';
 import { TiktokPreview } from '@gitroom/frontend/components/new-launch/providers/tiktok/tiktok.preview';
+import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
+import type { TikTokCreatorInfo } from '@gitroom/nestjs-libraries/integrations/social/tiktok.provider';
+
+/**
+ * TikTok "Required UX implementation" (Content Sharing Guidelines, Point 1):
+ * the composer must be rendered from a fresh creator_info query, i.e. what
+ * TiktokProvider.creatorInfo() returns through POST /integrations/function.
+ */
+type CreatorInfo = Extract<TikTokCreatorInfo, { ok: true }>;
+type CreatorState =
+  | { status: 'loading' }
+  | { status: 'ready'; info: CreatorInfo }
+  | { status: 'error'; code: string; message: string };
+
+const PRIVACY_LABELS: Record<string, [string, string]> = {
+  PUBLIC_TO_EVERYONE: ['public_to_everyone', 'Public to everyone'],
+  MUTUAL_FOLLOW_FRIENDS: ['mutual_follow_friends', 'Mutual follow friends'],
+  FOLLOWER_OF_CREATOR: ['follower_of_creator', 'Follower of creator'],
+  SELF_ONLY: ['self_only', 'Self only'],
+};
+
+const isVideoPath = (path?: string) => (path?.indexOf?.('mp4') ?? -1) > -1;
+
+/** Reads a video's duration in the browser; rejects (loudly) if it cannot. */
+const videoDurationSeconds = (url: string) =>
+  new Promise<number>((resolve, reject) => {
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+    const timeout = setTimeout(
+      () => reject(new Error('timeout reading video metadata')),
+      15000
+    );
+    video.onloadedmetadata = () => {
+      clearTimeout(timeout);
+      resolve(video.duration);
+    };
+    video.onerror = () => {
+      clearTimeout(timeout);
+      reject(new Error('cannot read video metadata'));
+    };
+    video.src = url;
+  });
 
 const TikTokSettings: FC<{
   values?: any;
 }> = (props) => {
-  const { watch, register } = useSettings();
+  const { watch, register, setValue } = useSettings();
   const { value } = useIntegration();
   const t = useT();
+  const customFunc = useCustomProviderFunction();
+  const [creator, setCreator] = useState<CreatorState>({ status: 'loading' });
+
+  useEffect(() => {
+    let cancelled = false;
+    const fail = (code: string, message: string) => {
+      if (cancelled) return;
+      setCreator({ status: 'error', code, message });
+      setValue('creator_status', code);
+    };
+    customFunc
+      .get('creatorInfo')
+      .then((info: TikTokCreatorInfo | false) => {
+        if (cancelled) return;
+        if (!info || typeof info !== 'object') {
+          // /integrations/function answers `false` when the call itself failed
+          fail('unreachable', 'Could not reach TikTok to load your account details.');
+          return;
+        }
+        if (info.ok !== true) {
+          fail(info.errorCode, info.errorMessage);
+          return;
+        }
+        setCreator({ status: 'ready', info });
+        setValue('creator_status', 'ok');
+        setValue('creator_privacy_options', info.privacyLevelOptions.join(','));
+        setValue('creator_max_video_sec', String(info.maxVideoPostDurationSec ?? ''));
+        // Interactions the creator disabled in TikTok stay off (Point 2c)
+        if (info.commentDisabled) setValue('comment', false);
+        if (info.duetDisabled) setValue('duet', false);
+        if (info.stitchDisabled) setValue('stitch', false);
+      })
+      .catch((e) => fail('unreachable', e?.message || 'Could not reach TikTok.'));
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const isPhoto = useMemo(() => {
     return value?.[0]?.image?.some((p) => (p?.path?.indexOf?.('mp4') ?? -1) === -1);
@@ -37,24 +114,29 @@ const TikTokSettings: FC<{
   const isUploadMode = content_posting_method === 'UPLOAD';
   const isPrivate = privacy_level === 'SELF_ONLY';
 
-  const privacyLevel = [
-    {
-      value: 'PUBLIC_TO_EVERYONE',
-      label: t('public_to_everyone', 'Public to everyone'),
-    },
-    {
-      value: 'MUTUAL_FOLLOW_FRIENDS',
-      label: t('mutual_follow_friends', 'Mutual follow friends'),
-    },
-    {
-      value: 'FOLLOWER_OF_CREATOR',
-      label: t('follower_of_creator', 'Follower of creator'),
-    },
-    {
-      value: 'SELF_ONLY',
-      label: t('self_only', 'Self only'),
-    },
-  ];
+  // Privacy options come from TikTok's creator_info for THIS account (Point 2b),
+  // never from a hardcoded list; private accounts get a different set.
+  const privacyLevel =
+    creator.status === 'ready'
+      ? creator.info.privacyLevelOptions.map((value) => ({
+          value,
+          label: PRIVACY_LABELS[value]
+            ? t(PRIVACY_LABELS[value][0], PRIVACY_LABELS[value][1])
+            : value,
+        }))
+      : [];
+  const interactionsDisabled =
+    creator.status === 'ready'
+      ? {
+          comment: creator.info.commentDisabled,
+          duet: creator.info.duetDisabled,
+          stitch: creator.info.stitchDisabled,
+        }
+      : { comment: false, duet: false, stitch: false };
+  const disabledNote = ` (${t(
+    'disabled_in_tiktok_settings',
+    'turned off in your TikTok settings'
+  )})`;
   const contentPostingMethod = [
     {
       value: 'DIRECT_POST',
@@ -84,6 +166,40 @@ const TikTokSettings: FC<{
 
   return (
     <div className="flex flex-col">
+      <input type="hidden" {...register('creator_status')} />
+      <input type="hidden" {...register('creator_privacy_options')} />
+      <input type="hidden" {...register('creator_max_video_sec')} />
+      {creator.status === 'loading' && (
+        <div className="text-[13px] text-customColor18 bg-tableBorder rounded-[8px] p-[10px] mb-[15px]">
+          {t('tiktok_loading_creator', 'Checking your TikTok account…')}
+        </div>
+      )}
+      {creator.status === 'error' && (
+        <div className="text-[13px] text-red-400 bg-tableBorder rounded-[8px] p-[10px] mb-[15px]">
+          {t(
+            'tiktok_creator_unavailable',
+            'TikTok is not accepting posts from this account right now'
+          )}{' '}
+          ({creator.code}){creator.message ? `: ${creator.message}` : ''}.{' '}
+          {t('tiktok_try_again_later', 'Please try again later.')}
+        </div>
+      )}
+      {creator.status === 'ready' && (
+        <div className="flex items-center gap-[10px] mb-[15px]">
+          {creator.info.creatorAvatarUrl && (
+            <img
+              src={creator.info.creatorAvatarUrl}
+              alt=""
+              className="w-[36px] h-[36px] rounded-full"
+            />
+          )}
+          <div className="text-[14px]">
+            {t('tiktok_posting_as', 'Posting to TikTok as')}{' '}
+            <span className="font-semibold">{creator.info.creatorNickname}</span>{' '}
+            <span className="text-customColor18">@{creator.info.creatorUsername}</span>
+          </div>
+        </div>
+      )}
       <div className="text-[13px] text-customColor18 bg-tableBorder rounded-[8px] p-[10px] mb-[15px]">
         {t(
           'tiktok_processing_notice',
@@ -93,7 +209,7 @@ const TikTokSettings: FC<{
       {isPhoto && <Input label="Title" {...register('title')} maxLength={89} />}
       <Select
         label={t('label_who_can_see_this_video', 'Who can see this video?')}
-        disabled={isUploadMode}
+        disabled={isUploadMode || creator.status !== 'ready'}
         {...register('privacy_level')}
       >
         <option value="">{t('select', 'Select')}</option>
@@ -153,9 +269,9 @@ const TikTokSettings: FC<{
       </div>
       <div className="flex gap-[40px]">
         <Checkbox
-          label={t('label_comments', 'Comments')}
+          label={t('label_comments', 'Comments') + (interactionsDisabled.comment ? disabledNote : '')}
           variant="hollow"
-          disabled={isUploadMode}
+          disabled={isUploadMode || interactionsDisabled.comment}
           {...register('comment', {
             value: false,
           })}
@@ -163,8 +279,8 @@ const TikTokSettings: FC<{
         {!isPhoto && (
           <Checkbox
             variant="hollow"
-            label={t('label_duet', 'Duet')}
-            disabled={isUploadMode}
+            label={t('label_duet', 'Duet') + (interactionsDisabled.duet ? disabledNote : '')}
+            disabled={isUploadMode || interactionsDisabled.duet}
             {...register('duet', {
               value: false,
             })}
@@ -172,9 +288,9 @@ const TikTokSettings: FC<{
         )}
         {!isPhoto && (
           <Checkbox
-            label={t('label_stitch', 'Stitch')}
+            label={t('label_stitch', 'Stitch') + (interactionsDisabled.stitch ? disabledNote : '')}
             variant="hollow"
-            disabled={isUploadMode}
+            disabled={isUploadMode || interactionsDisabled.stitch}
             {...register('stitch', {
               value: false,
             })}
@@ -217,7 +333,7 @@ const TikTokSettings: FC<{
             <div>
               {t(
                 'your_video_will_be_labeled_promotional',
-                'Your video will be labeled "Promotional Content".'
+                'Your photo/video will be labeled as "Promotional content".'
               )}
               <br />
               {t(
@@ -228,6 +344,10 @@ const TikTokSettings: FC<{
           </div>
         )}
         <div className="text-[14px] my-[10px] text-balance">
+          {t(
+            'indicate_whether_content_promotes',
+            'Indicate whether this content promotes yourself, a brand, product or service.'
+          )}{' '}
           {t(
             'turn_on_to_disclose_video_promotes',
             'Turn on to disclose that this video promotes goods or services in\n          exchange for something of value. You video could promote yourself, a\n          third party, or both.'
@@ -369,8 +489,36 @@ export default withProvider({
     if ((settings as any).disclose && !(settings as any).brand_organic_toggle && !(settings as any).brand_content_toggle) {
       return 'You need to indicate if your content promotes yourself, a third party, or both.';
     }
-    if (!(settings as any).privacy_level) {
-      return 'Please select a privacy level';
+    const s = settings as any;
+    const isDirectPost = (s.content_posting_method || 'DIRECT_POST') === 'DIRECT_POST';
+    if (isDirectPost) {
+      // TikTok Point 1: no publishing unless creator_info loaded and allows it
+      if (s.creator_status !== 'ok') {
+        return s.creator_status
+          ? `TikTok is not accepting posts from this account right now (${s.creator_status}). Please try again later.`
+          : 'Still checking your TikTok account, please wait a moment.';
+      }
+      if (!s.privacy_level) {
+        return 'Please select a privacy level';
+      }
+      const allowed = String(s.creator_privacy_options || '').split(',').filter(Boolean);
+      if (!allowed.includes(s.privacy_level)) {
+        return `The privacy level you chose is not available for this TikTok account (allowed: ${allowed.join(', ')}).`;
+      }
+      // TikTok Point 1: video must respect the creator's max duration
+      const video = firstItems?.find((p) => isVideoPath(p?.path));
+      const maxSec = Number(s.creator_max_video_sec);
+      if (video && maxSec > 0) {
+        let duration: number;
+        try {
+          duration = await videoDurationSeconds(video.path);
+        } catch (e) {
+          return `Could not read the video length to check TikTok's ${maxSec}s limit for this account (${(e as Error).message}).`;
+        }
+        if (duration > maxSec) {
+          return `This video is ${Math.ceil(duration)}s long; this TikTok account allows up to ${maxSec}s.`;
+        }
+      }
     }
     return true;
   },
