@@ -15,6 +15,20 @@ import { timer } from '@gitroom/helpers/utils/timer';
 import { Integration } from '@prisma/client';
 import { Rules } from '@gitroom/nestjs-libraries/chat/rules.description.decorator';
 
+export type TikTokCreatorInfo =
+  | {
+      ok: true;
+      creatorNickname: string;
+      creatorUsername: string;
+      creatorAvatarUrl: string;
+      privacyLevelOptions: string[];
+      commentDisabled: boolean;
+      duetDisabled: boolean;
+      stitchDisabled: boolean;
+      maxVideoPostDurationSec: number;
+    }
+  | { ok: false; errorCode: string; errorMessage: string };
+
 @Rules(
   'TikTok can have one video or one picture or multiple pictures, it cannot be without an attachment'
 )
@@ -23,13 +37,16 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
   name = 'Tiktok';
   isBetweenSteps = false;
   convertToJPEG = true;
+  // Only the scopes approved for the production BB Post app (TikTok developer
+  // portal, app 7586116596020676619, live since 2026-02-23). Requesting an
+  // unapproved scope makes TikTok reject the whole OAuth handshake
+  // ("scope_permission_missed"). video.list and user.info.stats (analytics)
+  // go back in once TikTok approves the revision that requests them.
   scopes = [
-    'video.list',
     'user.info.basic',
     'video.publish',
     'video.upload',
     'user.info.profile',
-    'user.info.stats',
   ];
   override maxConcurrentJob = 300;
   dto = TikTokDto;
@@ -361,24 +378,51 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
     };
   }
 
-  async maxVideoLength(accessToken: string) {
-    const {
-      data: { max_video_post_duration_sec },
-    } = await (
-      await fetch(
-        'https://open.tiktokapis.com/v2/post/publish/creator_info/query/',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      )
-    ).json();
-
+  /**
+   * TikTok Content Sharing Guidelines, "Required UX implementation", Point 1:
+   * the composer must be built from a FRESH creator_info query (privacy options,
+   * interactions the creator disabled, max video duration, creator identity) and
+   * publishing must stop when TikTok says the creator cannot post right now.
+   *
+   * Called from the composer via POST /integrations/function { name: 'creatorInfo' }
+   * and again from post() immediately before a Direct Post.
+   * TikTok answers HTTP 200 with error.code set for the "cannot post" cases
+   * (spam_risk_too_many_posts, spam_risk_user_banned_from_posting,
+   * reached_active_user_cap), so the body is inspected and the code is RETURNED,
+   * not thrown, so the UI can show it verbatim.
+   */
+  async creatorInfo(accessToken: string): Promise<TikTokCreatorInfo> {
+    const response = await this.fetch(
+      'https://open.tiktokapis.com/v2/post/publish/creator_info/query/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    const body = await response.json();
+    const code = body?.error?.code;
+    if (!body?.data || (code && code !== 'ok')) {
+      return {
+        ok: false,
+        errorCode: code || 'no_creator_info',
+        errorMessage:
+          body?.error?.message || 'TikTok did not return creator information',
+      };
+    }
+    const d = body.data;
     return {
-      maxDurationSeconds: max_video_post_duration_sec,
+      ok: true,
+      creatorNickname: d.creator_nickname,
+      creatorUsername: d.creator_username,
+      creatorAvatarUrl: d.creator_avatar_url,
+      privacyLevelOptions: d.privacy_level_options || [],
+      commentDisabled: !!d.comment_disabled,
+      duetDisabled: !!d.duet_disabled,
+      stitchDisabled: !!d.stitch_disabled,
+      maxVideoPostDurationSec: d.max_video_post_duration_sec,
     };
   }
 
@@ -546,6 +590,32 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
   ): Promise<PostResponse[]> {
     const [firstPost] = postDetails;
     const isPhoto = (firstPost?.media?.[0]?.path?.indexOf('mp4') || -1) === -1;
+
+    // TikTok Point 1: creator_info can change between composing and publishing
+    // (scheduled posts). Re-check right before a Direct Post and fail loudly
+    // rather than substituting a different privacy level.
+    if (
+      (firstPost?.settings?.content_posting_method || 'DIRECT_POST') ===
+      'DIRECT_POST'
+    ) {
+      const creator = await this.creatorInfo(accessToken);
+      if (creator.ok === false) {
+        throw new BadBody(
+          'tiktok',
+          JSON.stringify(creator),
+          {} as any,
+          `TikTok is not accepting posts from this account right now (${creator.errorCode}). Please try again later.`
+        );
+      }
+      if (!creator.privacyLevelOptions.includes(firstPost.settings.privacy_level)) {
+        throw new BadBody(
+          'tiktok',
+          JSON.stringify(creator),
+          {} as any,
+          `The privacy level "${firstPost.settings.privacy_level}" is not available for this TikTok account (allowed: ${creator.privacyLevelOptions.join(', ')}). Edit the post and choose again.`
+        );
+      }
+    }
 
     console.log({
       ...this.buildTikokPostInfoBody(firstPost),
