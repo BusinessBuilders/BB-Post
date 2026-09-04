@@ -1,5 +1,5 @@
 /**
- * BB Post Landing Page — Static Data
+ * BBPost Landing Page — Static Data
  * All content arrays are module-level constants (server-hoist-static-io).
  * This file is imported by server components — no 'use client' needed.
  */
@@ -35,7 +35,7 @@ export const FEATURES = [
     eyebrow: 'Scheduling',
     title: 'Schedule once. Publish everywhere.',
     icon: 'Calendar',
-    body: 'Stop logging into each platform one by one. BB Post lets you write, customize, and schedule posts for 19+ social media platforms from a single calendar. Tailor each post\'s format for each platform — all without switching tabs.',
+    body: 'Stop logging into each platform one by one. BBPost lets you write, customize, and schedule posts for 19+ social media platforms from a single calendar. Tailor each post\'s format for each platform — all without switching tabs.',
     bullets: [
       'Visual content calendar with drag-and-drop scheduling',
       'Cross-post with per-platform customization',
@@ -47,7 +47,7 @@ export const FEATURES = [
     eyebrow: 'AI-Powered',
     title: 'Write less. Post more. Say more.',
     icon: 'Sparkles',
-    body: 'BB Post\'s AI content assistant helps you generate platform-native post variations, repurpose long-form content into social snippets, and craft captions that fit each platform\'s style. It\'s not just autocomplete — it\'s a creative partner that knows your brand voice.',
+    body: 'BBPost\'s AI content assistant helps you generate platform-native post variations, repurpose long-form content into social snippets, and craft captions that fit each platform\'s style. It\'s not just autocomplete — it\'s a creative partner that knows your brand voice.',
     bullets: [
       'AI-generated post variations from a single idea',
       'Repurpose blogs, newsletters, and videos into social content',
@@ -59,7 +59,7 @@ export const FEATURES = [
     eyebrow: 'Automation',
     title: 'Set it up once. Let it run.',
     icon: 'Zap',
-    body: 'Go beyond scheduling. BB Post\'s automation engine connects to your existing workflow tools so your social media strategy runs on autopilot. Trigger posts from external events, auto-respond to engagement milestones, and plug into the tools you already use.',
+    body: 'Go beyond scheduling. BBPost\'s automation engine connects to your existing workflow tools so your social media strategy runs on autopilot. Trigger posts from external events, auto-respond to engagement milestones, and plug into the tools you already use.',
     bullets: [
       'Native integrations with n8n, Make.com, and Zapier',
       'Public API for custom automation workflows',
@@ -71,7 +71,7 @@ export const FEATURES = [
     eyebrow: 'Analytics',
     title: 'Know what\'s working. Double down.',
     icon: 'BarChart3',
-    body: 'BB Post\'s analytics dashboard surfaces what actually moves the needle — not just vanity metrics. Track engagement rates, follower growth, and post performance across every platform in one unified view.',
+    body: 'BBPost\'s analytics dashboard surfaces what actually moves the needle — not just vanity metrics. Track engagement rates, follower growth, and post performance across every platform in one unified view.',
     bullets: [
       'Cross-platform performance dashboard',
       'Per-post and per-platform analytics',
@@ -83,7 +83,7 @@ export const FEATURES = [
     eyebrow: 'Teamwork',
     title: 'Built for teams who post together.',
     icon: 'Users',
-    body: 'Agencies, marketing teams, and multi-brand businesses have different needs than solo creators. BB Post includes role-based access, approval workflows, and client workspaces — so everyone stays in their lane and nothing goes out without a second pair of eyes.',
+    body: 'Agencies, marketing teams, and multi-brand businesses have different needs than solo creators. BBPost includes role-based access, approval workflows, and client workspaces — so everyone stays in their lane and nothing goes out without a second pair of eyes.',
     bullets: [
       'Role-based permissions (Admin, Editor, Viewer)',
       'Content approval workflows before publishing',
@@ -95,7 +95,7 @@ export const FEATURES = [
     eyebrow: 'Open Source',
     title: 'Your data. Your rules.',
     icon: 'Code2',
-    body: 'BB Post is fully open source under AGPL v3. Self-host on your own server, contribute to development, or audit the code yourself. No black-box algorithms deciding what happens to your content. You own your data — always.',
+    body: 'BBPost is fully open source under AGPL v3. Self-host on your own server, contribute to development, or audit the code yourself. No black-box algorithms deciding what happens to your content. You own your data — always.',
     bullets: [
       'Full source code available on GitHub',
       'Self-host on any cloud or on-premise server',
@@ -114,11 +114,11 @@ export const HOW_IT_WORKS_STEPS = [
   },
   {
     title: 'Create and schedule your content',
-    body: 'Write posts, design with AI, and schedule them on a visual calendar. BB Post optimizes timing based on your audience\'s activity.',
+    body: 'Write posts, design with AI, and schedule them on a visual calendar. BBPost optimizes timing based on your audience\'s activity.',
   },
   {
     title: 'Automate and analyze',
-    body: 'Set up automation rules, monitor performance, and let BB Post do the repetitive work while you focus on strategy.',
+    body: 'Set up automation rules, monitor performance, and let BBPost do the repetitive work while you focus on strategy.',
   },
 ] as const;
 
@@ -126,13 +126,13 @@ export const HOW_IT_WORKS_STEPS = [
 
 export const TESTIMONIALS = [
   {
-    quote: 'We manage 12 client accounts and BB Post cut our scheduling time in half. The approval workflow alone saves us 4 hours a week.',
+    quote: 'We manage 12 client accounts and BBPost cut our scheduling time in half. The approval workflow alone saves us 4 hours a week.',
     name: 'Sarah M.',
     role: 'Owner, Digital Marketing Agency',
     initials: 'SM',
   },
   {
-    quote: 'I was using 3 different tools for what BB Post does in one. The AI caption suggestions are shockingly good — it actually sounds like my brand.',
+    quote: 'I was using 3 different tools for what BBPost does in one. The AI caption suggestions are shockingly good — it actually sounds like my brand.',
     name: 'James K.',
     role: 'Founder, E-commerce Brand',
     initials: 'JK',

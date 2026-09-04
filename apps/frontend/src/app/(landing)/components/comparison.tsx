@@ -47,7 +47,7 @@ export function Comparison() {
             <thead>
               <tr className="border-b border-white/[0.08]">
                 <th className="py-4 px-4 text-left text-sm font-medium text-white/40 w-2/5">Feature</th>
-                <th className="py-4 px-4 text-center text-sm font-bold text-[#8B5CF6] bg-[#8B5CF6]/5 w-[15%]">BB Post</th>
+                <th className="py-4 px-4 text-center text-sm font-bold text-[#8B5CF6] bg-[#8B5CF6]/5 w-[15%]">BBPost</th>
                 <th className="py-4 px-4 text-center text-sm font-medium text-white/40 w-[15%]">Buffer</th>
                 <th className="py-4 px-4 text-center text-sm font-medium text-white/40 w-[15%]">Later</th>
                 <th className="py-4 px-4 text-center text-sm font-medium text-white/40 w-[15%]">Postiz</th>
@@ -68,7 +68,7 @@ export function Comparison() {
         </motion.div>
 
         <p className="mt-6 text-center text-white/40 text-sm">
-          BB Post is the only open-source social scheduler with AI content, full automation, and a free plan — all in one product.
+          BBPost is the only open-source social scheduler with AI content, full automation, and a free plan — all in one product.
         </p>
       </div>
     </section>

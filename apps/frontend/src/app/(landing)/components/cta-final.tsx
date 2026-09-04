@@ -24,7 +24,7 @@ export function CtaFinal() {
           <span className="text-[#8B5CF6]">Start reaching them.</span>
         </h2>
         <p className="mt-4 text-white/55 leading-relaxed">
-          BB Post is free to start, open to extend, and built for businesses that take social media seriously.
+          BBPost is free to start, open to extend, and built for businesses that take social media seriously.
         </p>
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link

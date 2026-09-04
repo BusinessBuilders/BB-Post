@@ -1,5 +1,5 @@
 /**
- * BB Post Landing Page Layout
+ * BBPost Landing Page Layout
  *
  * Parallel root layout — this app has no app/layout.tsx, so each route group
  * defines its own <html><body> root. This layout is completely isolated from
@@ -25,9 +25,11 @@ const jakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'BB Post — All your social media. One smart dashboard.',
+  // TikTok app review requires the browser-tab title to match the app name
+  // "BBPost" exactly — keep taglines in og/twitter titles only.
+  title: 'BBPost',
   description:
-    'BB Post is an open-source social media scheduler for businesses and creators. Schedule, automate, and analyze across 19+ platforms. Free to start.',
+    'BBPost is an open-source social media scheduler for businesses and creators. Schedule, automate, and analyze across 19+ platforms. Free to start.',
   keywords: [
     'social media scheduler',
     'open source',
@@ -38,17 +40,17 @@ export const metadata: Metadata = {
     'content calendar',
   ],
   openGraph: {
-    title: 'BB Post — All your social media. One smart dashboard.',
+    title: 'BBPost — All your social media. One smart dashboard.',
     description:
       'Open-source social media scheduler. 19+ platforms, AI content generation, workflow automation. Free plan available.',
-    url: 'https://social.business-builder.online',
-    siteName: 'BB Post',
+    url: 'https://bbpost.online',
+    siteName: 'BBPost',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BB Post — All your social media. One smart dashboard.',
+    title: 'BBPost — All your social media. One smart dashboard.',
     description:
       'Open-source social media scheduler. 19+ platforms, AI, automation. Free to start.',
   },
@@ -57,7 +59,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   alternates: {
-    canonical: 'https://social.business-builder.online',
+    canonical: 'https://bbpost.online',
   },
 };
 

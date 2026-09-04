@@ -49,7 +49,7 @@ export function Hero() {
           transition={{ ...EASE, delay: 0.2 }}
           className="text-lg md:text-xl text-white/60 max-w-2xl leading-relaxed"
         >
-          BB Post is an open-source social media scheduler built for businesses and creators
+          BBPost is an open-source social media scheduler built for businesses and creators
           who want real results. Schedule, automate, analyze, and collaborate across 19+
           platforms — free to start.
         </motion.p>

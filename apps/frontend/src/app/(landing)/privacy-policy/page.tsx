@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — BB Post',
+  title: 'Privacy Policy — BBPost',
 };
 
 export default function PrivacyPolicyPage() {
@@ -10,16 +10,16 @@ export default function PrivacyPolicyPage() {
     <main className="min-h-screen bg-[#0E0E0E] text-white px-6 py-20">
       <div className="max-w-3xl mx-auto">
         <Link href="/" className="text-[#8B5CF6] hover:underline text-sm mb-8 inline-block">
-          ← Back to BB Post
+          ← Back to BBPost
         </Link>
         <h1 className="text-4xl font-bold mb-4">Privacy Policy</h1>
         <p className="text-white/60 mb-8">Effective Date: February 26, 2026</p>
 
         <div className="prose prose-invert max-w-none space-y-6 text-white/80 leading-relaxed">
           <p>
-            BB Post is an open-source social media management platform operated by Business Builders,
+            BBPost is an open-source social media management platform operated by Business Builders,
             licensed under AGPL&nbsp;v3. This Privacy Policy describes how we collect, use, and
-            protect your information when you use BB Post.
+            protect your information when you use BBPost.
           </p>
 
           <h2 className="text-2xl font-semibold text-white mt-8">1. Consent to Receive Communications</h2>
@@ -37,7 +37,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-2xl font-semibold text-white mt-8">2. Information We Collect</h2>
           <h3 className="text-lg font-semibold text-white/90 mt-4">A. Personal Information</h3>
           <p>
-            When you create a BB Post account or fill out a form, we collect information such as your
+            When you create a BBPost account or fill out a form, we collect information such as your
             name, email address, and phone number. Payment details (such as credit card numbers) are
             securely processed by third-party payment processors and are not stored on our servers.
           </p>
@@ -55,7 +55,7 @@ export default function PrivacyPolicyPage() {
 
           <h2 className="text-2xl font-semibold text-white mt-8">3. How We Use Your Information</h2>
           <ul className="list-disc list-inside space-y-2 ml-4">
-            <li>To provide and manage your BB Post account and scheduled posts.</li>
+            <li>To provide and manage your BBPost account and scheduled posts.</li>
             <li>To generate analytics and enable team collaboration features.</li>
             <li>To personalize and improve site functionality.</li>
             <li>To send transactional emails, updates, alerts, and promotional content.</li>
@@ -75,7 +75,7 @@ export default function PrivacyPolicyPage() {
 
           <h2 className="text-2xl font-semibold text-white mt-8">5. Data Retention</h2>
           <p>
-            You may delete your BB Post account at any time. Upon deletion, your personal data and
+            You may delete your BBPost account at any time. Upon deletion, your personal data and
             connected social account tokens are removed from our systems within 30 days.
           </p>
 
@@ -108,7 +108,7 @@ export default function PrivacyPolicyPage() {
 
           <h2 className="text-2xl font-semibold text-white mt-8">9. Third-Party Platforms &amp; Links</h2>
           <p>
-            BB Post integrates with third-party social media platforms (TikTok, Instagram, LinkedIn,
+            BBPost integrates with third-party social media platforms (TikTok, Instagram, LinkedIn,
             etc.). Your use of those platforms is governed by their respective privacy policies. Our
             website may also contain links to external sites that have their own privacy policies. We
             are not responsible for their content or practices.
@@ -116,7 +116,7 @@ export default function PrivacyPolicyPage() {
 
           <h2 className="text-2xl font-semibold text-white mt-8">10. Open Source</h2>
           <p>
-            BB Post is fully open source under{' '}
+            BBPost is fully open source under{' '}
             <a
               href="https://www.gnu.org/licenses/agpl-3.0.html"
               className="text-[#8B5CF6] hover:underline"
@@ -135,18 +135,18 @@ export default function PrivacyPolicyPage() {
               GitHub
             </a>
             . Self-hosted deployments are subject to this policy only for the hosted service at
-            social.business-builder.online.
+            bbpost.online.
           </p>
 
           <h2 className="text-2xl font-semibold text-white mt-8">11. Changes to This Privacy Policy</h2>
           <p>
             We may update this policy periodically. Any changes will be posted on this page, and your
-            continued use of BB Post indicates acceptance of the updated policy.
+            continued use of BBPost indicates acceptance of the updated policy.
           </p>
 
           <h2 className="text-2xl font-semibold text-white mt-8">12. Children&apos;s Privacy</h2>
           <p>
-            BB Post is not intended for children under 13, and we do not knowingly collect personal
+            BBPost is not intended for children under 13, and we do not knowingly collect personal
             information from them. If you believe such information has been collected, please contact
             us immediately.
           </p>

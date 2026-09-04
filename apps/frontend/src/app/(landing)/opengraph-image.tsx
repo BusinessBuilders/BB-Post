@@ -1,5 +1,5 @@
 /**
- * BB Post — Open Graph Image
+ * BBPost — Open Graph Image
  *
  * File-based OG image convention (Next.js 14).
  * Automatically served at /opengraph-image and covers both OG (Facebook, LinkedIn)
@@ -10,7 +10,7 @@
  */
 import { ImageResponse } from 'next/og';
 
-export const alt = 'BB Post — All your social media. One smart dashboard.';
+export const alt = 'BBPost — All your social media. One smart dashboard.';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -73,7 +73,7 @@ export default function Image() {
           <span
             style={{ fontSize: '28px', color: 'white', fontWeight: '700' }}
           >
-            BB Post
+            BBPost
           </span>
         </div>
 

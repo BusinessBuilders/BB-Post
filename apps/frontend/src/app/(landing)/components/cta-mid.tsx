@@ -21,7 +21,7 @@ export function CtaMid() {
           Ready to post smarter?
         </h2>
         <p className="mt-4 text-white/55 leading-relaxed">
-          Join businesses and creators who schedule, automate, and grow with BB Post.
+          Join businesses and creators who schedule, automate, and grow with BBPost.
         </p>
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link

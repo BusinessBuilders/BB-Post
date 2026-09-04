@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { isGeneralServerSide } from '@gitroom/helpers/utils/is.general.server.side';
 
 export const metadata: Metadata = {
-  title: `${isGeneralServerSide() ? 'BB Post' : 'Gitroom'} Media`,
+  title: `${isGeneralServerSide() ? 'BBPost' : 'Gitroom'} Media`,
   description: '',
 };
 

@@ -16,7 +16,7 @@ export default function LegalLayout({ children }: { children: ReactNode }) {
           <div className="max-w-4xl mx-auto py-12 px-6">
             <div className="mb-8">
               <Link href="/auth">
-                <Image width={60} height={60} src="/logo.png" alt="BB Post" />
+                <Image width={60} height={60} src="/logo.png" alt="BBPost" />
               </Link>
             </div>
             <div className="bg-[#1A1919] rounded-xl p-8 md:p-12">

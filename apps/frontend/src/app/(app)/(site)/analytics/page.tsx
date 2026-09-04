@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { PlatformAnalytics } from '@gitroom/frontend/components/platform-analytics/platform.analytics';
 import { isGeneralServerSide } from '@gitroom/helpers/utils/is.general.server.side';
 export const metadata: Metadata = {
-  title: `${isGeneralServerSide() ? 'BB Post' : 'Gitroom'} Analytics`,
+  title: `${isGeneralServerSide() ? 'BBPost' : 'Gitroom'} Analytics`,
   description: '',
 };
 export default async function Index() {

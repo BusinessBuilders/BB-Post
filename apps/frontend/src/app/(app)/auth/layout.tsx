@@ -20,7 +20,7 @@ export default async function AuthLayout({
       <ReturnUrlComponent />
       <div className="flex flex-col py-[40px] px-[20px] flex-1 lg:w-[600px] lg:flex-none rounded-[12px] text-white p-[12px] bg-[#1A1919]">
         <div className="w-full max-w-[440px] mx-auto justify-center gap-[20px] h-full flex flex-col text-white">
-          <Image width={60} height={60} src="/logo.png" alt="BB Post" />
+          <Image width={60} height={60} src="/logo.png" alt="BBPost" />
           <div className="flex">{children}</div>
         </div>
       </div>
@@ -29,7 +29,7 @@ export default async function AuthLayout({
           Over <span className="text-[42px] text-[#FC69FF]">20,000+</span>{' '}
           Entrepreneurs use
           <br />
-          BB Post To Grow Their Social Presence
+          BBPost To Grow Their Social Presence
         </div>
         <TestimonialComponent />
       </div>

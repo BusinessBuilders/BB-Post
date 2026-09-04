@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service — BB Post',
+  title: 'Terms of Service — BBPost',
 };
 
 export default function TermsOfServicePage() {
@@ -10,16 +10,16 @@ export default function TermsOfServicePage() {
     <main className="min-h-screen bg-[#0E0E0E] text-white px-6 py-20">
       <div className="max-w-3xl mx-auto">
         <Link href="/" className="text-[#8B5CF6] hover:underline text-sm mb-8 inline-block">
-          ← Back to BB Post
+          ← Back to BBPost
         </Link>
         <h1 className="text-4xl font-bold mb-4">Terms of Service</h1>
         <p className="text-white/60 mb-8">Effective Date: November 18, 2024</p>
 
         <div className="prose prose-invert max-w-none space-y-6 text-white/80 leading-relaxed">
           <p>
-            Welcome to BB Post, a social media scheduling and management platform operated by
+            Welcome to BBPost, a social media scheduling and management platform operated by
             Business Builders. These Terms of Service govern your use of our website and Services.
-            By accessing or using BB Post, you agree to these Terms.
+            By accessing or using BBPost, you agree to these Terms.
           </p>
 
           <p>
@@ -30,13 +30,13 @@ export default function TermsOfServicePage() {
 
           <h2 className="text-2xl font-semibold text-white mt-8">1. Acceptance of Terms</h2>
           <p>
-            By using BB Post, you acknowledge that you have read, understood, and agree to be bound
+            By using BBPost, you acknowledge that you have read, understood, and agree to be bound
             by these Terms. If you do not agree with any part of these Terms, please discontinue
             use of the Service immediately.
           </p>
 
           <h2 className="text-2xl font-semibold text-white mt-8">2. Services Provided</h2>
-          <p>BB Post provides social media management tools including:</p>
+          <p>BBPost provides social media management tools including:</p>
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>Scheduling and publishing content to 19+ social media platforms.</li>
             <li>AI-powered content generation and suggestions.</li>
@@ -45,7 +45,7 @@ export default function TermsOfServicePage() {
             <li>Automation integrations (n8n, Make.com, Zapier, Webhooks, Public API).</li>
           </ul>
           <p>
-            BB Post is fully open source under{' '}
+            BBPost is fully open source under{' '}
             <a
               href="https://www.gnu.org/licenses/agpl-3.0.html"
               className="text-[#8B5CF6] hover:underline"
@@ -67,7 +67,7 @@ export default function TermsOfServicePage() {
           </p>
 
           <h2 className="text-2xl font-semibold text-white mt-8">3. Account Registration</h2>
-          <p>To access BB Post, you agree to:</p>
+          <p>To access BBPost, you agree to:</p>
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>Be at least 18 years of age.</li>
             <li>Provide accurate, current, and complete information during registration.</li>
@@ -80,7 +80,7 @@ export default function TermsOfServicePage() {
           </p>
 
           <h2 className="text-2xl font-semibold text-white mt-8">4. Acceptable Use</h2>
-          <p>You must not use BB Post to:</p>
+          <p>You must not use BBPost to:</p>
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>Violate any applicable laws or regulations.</li>
             <li>Post spam, illegal, harmful, threatening, or harassing content.</li>
@@ -106,7 +106,7 @@ export default function TermsOfServicePage() {
 
           <h2 className="text-2xl font-semibold text-white mt-8">7. Social Platform Compliance</h2>
           <p>
-            When using BB Post with third-party platforms (TikTok, Instagram, LinkedIn, YouTube,
+            When using BBPost with third-party platforms (TikTok, Instagram, LinkedIn, YouTube,
             etc.), you agree to comply with those platforms&apos; terms of service and community
             guidelines in addition to these Terms. We are not affiliated with, endorsed by, or
             sponsored by any third-party platform. Platform API changes may affect Service
@@ -115,16 +115,16 @@ export default function TermsOfServicePage() {
 
           <h2 className="text-2xl font-semibold text-white mt-8">8. Intellectual Property</h2>
           <p>
-            You retain ownership of all content you create and upload through BB Post. By using the
+            You retain ownership of all content you create and upload through BBPost. By using the
             Service, you grant us a limited license to store, display, and transmit your content
-            solely to provide the Service. All BB Post branding, design, and proprietary features
+            solely to provide the Service. All BBPost branding, design, and proprietary features
             are the property of Business Builders. The open-source codebase is licensed under
             AGPL&nbsp;v3.
           </p>
 
           <h2 className="text-2xl font-semibold text-white mt-8">9. Disclaimer of Warranties</h2>
           <p>
-            BB Post is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind,
+            BBPost is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind,
             express or implied, including warranties of merchantability, fitness for a particular
             purpose, or non-infringement. We do not guarantee that scheduled posts will publish
             successfully, as this depends on third-party platform availability and API services.
@@ -134,7 +134,7 @@ export default function TermsOfServicePage() {
           <p>
             To the fullest extent permitted by law, Business Builders shall not be liable for any
             damages — including direct, indirect, incidental, or consequential damages — arising
-            from the use or inability to use BB Post, unauthorized access to or alteration of your
+            from the use or inability to use BBPost, unauthorized access to or alteration of your
             data, lost content, failed posts, or platform policy changes. Our total liability for
             any claims is limited to the amount you paid for the Service during the previous
             12&nbsp;months.
@@ -151,7 +151,7 @@ export default function TermsOfServicePage() {
           <h2 className="text-2xl font-semibold text-white mt-8">12. Changes to Terms</h2>
           <p>
             We may modify these Terms at any time. Changes will be posted on this page with an
-            updated effective date. Your continued use of BB Post after changes constitutes
+            updated effective date. Your continued use of BBPost after changes constitutes
             acceptance of the revised Terms.
           </p>
 
@@ -159,7 +159,7 @@ export default function TermsOfServicePage() {
           <p>
             These Terms are governed by the laws of the Commonwealth of Massachusetts, without
             regard to its conflict of law principles. Any disputes arising from these Terms or the
-            use of BB Post shall be brought in the state or federal courts located in Massachusetts,
+            use of BBPost shall be brought in the state or federal courts located in Massachusetts,
             and you consent to the jurisdiction of such courts.
           </p>
 

@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — BB Post',
-  description: 'Privacy Policy for BB Post social media scheduling platform',
+  title: 'Privacy Policy — BBPost',
+  description: 'Privacy Policy for BBPost social media scheduling platform',
 };
 
 export default function PrivacyPolicyPage() {
@@ -13,9 +13,9 @@ export default function PrivacyPolicyPage() {
 
       <section className="mb-8">
         <p className="text-gray-300 mb-4">
-          BB Post is an open-source social media management platform operated by Business Builders,
+          BBPost is an open-source social media management platform operated by Business Builders,
           licensed under AGPL&nbsp;v3. This Privacy Policy describes how we collect, use, and protect
-          your information when you use BB Post.
+          your information when you use BBPost.
         </p>
       </section>
 
@@ -37,7 +37,7 @@ export default function PrivacyPolicyPage() {
         <h2 className="text-xl font-semibold mb-4">2. Information We Collect</h2>
 
         <h3 className="text-lg font-medium mb-2 text-gray-200">2.1 Account Information</h3>
-        <p className="text-gray-300 mb-4">When you create a BB Post account, we collect:</p>
+        <p className="text-gray-300 mb-4">When you create a BBPost account, we collect:</p>
         <ul className="list-disc list-inside text-gray-300 mb-4 space-y-1">
           <li>Email address, name, and username</li>
           <li>Password (encrypted)</li>
@@ -55,7 +55,7 @@ export default function PrivacyPolicyPage() {
         <h3 className="text-lg font-medium mb-2 text-gray-200">2.3 Content Data</h3>
         <p className="text-gray-300 mb-4">
           We store posts, images, videos, scheduled content, drafts, and AI-generated suggestions
-          that you create through BB Post.
+          that you create through BBPost.
         </p>
 
         <h3 className="text-lg font-medium mb-2 text-gray-200">2.4 Usage Data</h3>
@@ -68,7 +68,7 @@ export default function PrivacyPolicyPage() {
       <section className="mb-8">
         <h2 className="text-xl font-semibold mb-4">3. How We Use Your Information</h2>
         <ul className="list-disc list-inside text-gray-300 space-y-1">
-          <li>To provide and manage your BB Post account and scheduled posts</li>
+          <li>To provide and manage your BBPost account and scheduled posts</li>
           <li>To generate analytics and enable team collaboration features</li>
           <li>To send transactional emails, updates, alerts, and promotional content</li>
           <li>To process secure transactions</li>
@@ -139,7 +139,7 @@ export default function PrivacyPolicyPage() {
       <section className="mb-8">
         <h2 className="text-xl font-semibold mb-4">9. Third-Party Platforms</h2>
         <p className="text-gray-300">
-          BB Post integrates with third-party social media platforms (TikTok, Instagram, LinkedIn,
+          BBPost integrates with third-party social media platforms (TikTok, Instagram, LinkedIn,
           YouTube, Twitter/X, Facebook, etc.). Your use of those platforms is governed by their
           respective privacy policies. Our website may also contain links to external sites with
           their own privacy policies. We are not responsible for their practices.
@@ -149,7 +149,7 @@ export default function PrivacyPolicyPage() {
       <section className="mb-8">
         <h2 className="text-xl font-semibold mb-4">10. Open Source</h2>
         <p className="text-gray-300">
-          BB Post is fully open source under AGPL&nbsp;v3. You can review the complete source code on{' '}
+          BBPost is fully open source under AGPL&nbsp;v3. You can review the complete source code on{' '}
           <a
             href="https://github.com/BusinessBuilders/BB-Post"
             className="text-[#8B5CF6] hover:underline"
@@ -159,14 +159,14 @@ export default function PrivacyPolicyPage() {
             GitHub
           </a>
           . Self-hosted deployments are subject to this policy only for the hosted service at
-          social.business-builder.online.
+          bbpost.online.
         </p>
       </section>
 
       <section className="mb-8">
         <h2 className="text-xl font-semibold mb-4">11. Children&apos;s Privacy</h2>
         <p className="text-gray-300">
-          BB Post is not intended for users under 13 years of age. We do not knowingly collect
+          BBPost is not intended for users under 13 years of age. We do not knowingly collect
           personal information from children. If you believe such information has been collected,
           please contact us immediately.
         </p>
@@ -176,7 +176,7 @@ export default function PrivacyPolicyPage() {
         <h2 className="text-xl font-semibold mb-4">12. Changes to This Policy</h2>
         <p className="text-gray-300">
           We may update this Privacy Policy periodically. Changes will be posted on this page with
-          an updated effective date. Your continued use of BB Post constitutes acceptance of the
+          an updated effective date. Your continued use of BBPost constitutes acceptance of the
           updated policy.
         </p>
       </section>
@@ -196,7 +196,7 @@ export default function PrivacyPolicyPage() {
 
       <section className="border-t border-gray-700 pt-6 mt-8">
         <p className="text-gray-400 text-sm">
-          By using BB Post, you acknowledge that you have read and understood this Privacy Policy.
+          By using BBPost, you acknowledge that you have read and understood this Privacy Policy.
         </p>
       </section>
     </article>

@@ -33,8 +33,8 @@ export function Nav() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
-          <Image src="/logo.png" alt="BB Post" width={32} height={32} priority className="rounded-md" />
-          <span className="text-white font-bold text-lg">BB Post</span>
+          <Image src="/logo.png" alt="BBPost" width={32} height={32} priority className="rounded-md" />
+          <span className="text-white font-bold text-lg">BBPost</span>
         </Link>
 
         {/* Desktop links */}

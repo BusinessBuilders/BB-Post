@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Branded Content Policy — BB Post',
+  title: 'Branded Content Policy — BBPost',
 };
 
 export default function BrandedContentPolicyPage() {
@@ -10,14 +10,14 @@ export default function BrandedContentPolicyPage() {
     <main className="min-h-screen bg-[#0E0E0E] text-white px-6 py-20">
       <div className="max-w-3xl mx-auto">
         <Link href="/" className="text-[#8B5CF6] hover:underline text-sm mb-8 inline-block">
-          ← Back to BB Post
+          ← Back to BBPost
         </Link>
         <h1 className="text-4xl font-bold mb-4">Branded Content Policy</h1>
         <p className="text-white/60 mb-8">TikTok API Compliance — April 2026</p>
 
         <div className="prose prose-invert max-w-none space-y-6 text-white/80 leading-relaxed">
           <p>
-            This page describes BB Post&apos;s Branded Content Policy as required by the TikTok API
+            This page describes BBPost&apos;s Branded Content Policy as required by the TikTok API
             Terms of Service.
           </p>
 
@@ -28,11 +28,11 @@ export default function BrandedContentPolicyPage() {
             content using TikTok&apos;s built-in disclosure tools.
           </p>
 
-          <h2 className="text-2xl font-semibold text-white mt-8">BB Post and Branded Content</h2>
+          <h2 className="text-2xl font-semibold text-white mt-8">BBPost and Branded Content</h2>
           <p>
-            BB Post is a scheduling tool that publishes content on behalf of users. BB Post does not
+            BBPost is a scheduling tool that publishes content on behalf of users. BBPost does not
             create sponsored content or act as an advertising intermediary. Users who schedule
-            branded content through BB Post are responsible for:
+            branded content through BBPost are responsible for:
           </p>
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>Complying with TikTok&apos;s Branded Content Policy.</li>

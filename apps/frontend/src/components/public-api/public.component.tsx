@@ -227,7 +227,7 @@ const McpSection = ({
           <div className="text-[13px] text-customColor18 mt-[2px]">
             {t(
               'connect_your_mcp_client_to_postiz_to_schedule_your_posts_faster',
-              'Connect BB Post MCP server to your client (Http streaming) to schedule your posts faster.'
+              'Connect BBPost MCP server to your client (Http streaming) to schedule your posts faster.'
             )}
           </div>
         </div>
@@ -345,7 +345,7 @@ const cliSteps = [
     code: 'export POSTIZ_API_KEY="{API_KEY}"',
   },
   {
-    label: 'Install the BB Post skill for your AI agent',
+    label: 'Install the BBPost skill for your AI agent',
     code: 'npx skills add gitroomhq/postiz-agent',
   },
 ] as const;
@@ -386,7 +386,7 @@ const CliSection = ({
           <div className="text-[13px] text-customColor18 mt-[2px]">
             {t(
               'cli_description',
-              'Use the BB Post CLI to automate posting from your terminal, or install the skill to let your AI agent schedule posts for you.'
+              'Use the BBPost CLI to automate posting from your terminal, or install the skill to let your AI agent schedule posts for you.'
             )}
           </div>
         </div>
@@ -499,7 +499,7 @@ const PublicApiContent = () => {
         <br />
         {t(
           'api_auth_note_line2',
-          'If you are building a product that schedules posts on behalf of other BB Post users,'
+          'If you are building a product that schedules posts on behalf of other BBPost users,'
         )}
         <br />
         {t(
@@ -521,7 +521,7 @@ const PublicApiContent = () => {
             <div className="text-[13px] text-customColor18 mt-[2px]">
               {t(
                 'use_postiz_api_to_integrate_with_your_tools',
-                'Use BB Post API to integrate with your tools.'
+                'Use BBPost API to integrate with your tools.'
               )}
             </div>
           </div>
