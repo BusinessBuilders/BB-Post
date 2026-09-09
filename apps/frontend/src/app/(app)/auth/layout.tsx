@@ -4,7 +4,6 @@ export const dynamic = 'force-dynamic';
 import { ReactNode } from 'react';
 import Image from 'next/image';
 import loadDynamic from 'next/dynamic';
-import { TestimonialComponent } from '@gitroom/frontend/components/auth/testimonial.component';
 import { LogoTextComponent } from '@gitroom/frontend/components/ui/logo-text.component';
 const ReturnUrlComponent = loadDynamic(() => import('./return.url.component'));
 export default async function AuthLayout({
@@ -24,14 +23,36 @@ export default async function AuthLayout({
           <div className="flex">{children}</div>
         </div>
       </div>
-      <div className="text-[36px] flex-1 pt-[88px] hidden lg:flex flex-col items-center">
-        <div className="text-center">
-          Over <span className="text-[42px] text-[#FC69FF]">20,000+</span>{' '}
-          Entrepreneurs use
-          <br />
-          BBPost To Grow Their Social Presence
+      {/* Truthful product panel: the upstream marquee of Postiz testimonials and the
+          "20,000+ entrepreneurs" claim do not describe BBPost (removed 2026-09-09). */}
+      <div className="flex-1 hidden lg:flex flex-col items-center justify-center px-[60px]">
+        <div className="max-w-[760px] flex flex-col gap-[28px]">
+          <div className="text-[40px] leading-[1.15] font-[600] text-center">
+            Plan, publish and measure every channel
+            <br />
+            from one dashboard.
+          </div>
+          <div className="text-[18px] leading-[1.6] text-center text-[#B8B8B8]">
+            BBPost is the social media scheduler built and hosted by Business
+            Builders. Connect TikTok, Instagram, Facebook, LinkedIn, X, YouTube,
+            Threads and more, write once, schedule across all of them, and see
+            how each post performs.
+          </div>
+          <div className="flex justify-center gap-[10px] flex-wrap text-[14px] text-[#DADADA]">
+            {[
+              'Self-hosted, your data stays with you',
+              'Built around each platform\'s posting rules',
+              'Team workspaces and approvals',
+            ].map((item) => (
+              <div
+                key={item}
+                className="rounded-full border border-[#2E2E2E] bg-[#151515] px-[16px] py-[8px]"
+              >
+                {item}
+              </div>
+            ))}
+          </div>
         </div>
-        <TestimonialComponent />
       </div>
     </div>
   );
