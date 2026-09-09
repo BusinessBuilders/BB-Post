@@ -37,16 +37,21 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
   name = 'Tiktok';
   isBetweenSteps = false;
   convertToJPEG = true;
-  // Only the scopes approved for the production BB Post app (TikTok developer
-  // portal, app 7586116596020676619, live since 2026-02-23). Requesting an
-  // unapproved scope makes TikTok reject the whole OAuth handshake
-  // ("scope_permission_missed"). video.list and user.info.stats (analytics)
-  // go back in once TikTok approves the revision that requests them.
+  // Only the scopes approved for the production BBPost app (TikTok developer
+  // portal, app 7586116596020676619, live since 2026-02-23) are requested by
+  // default. Requesting an unapproved scope makes TikTok reject the whole OAuth
+  // handshake ("scope_permission_missed"). The analytics scopes (user.info.stats,
+  // video.list) are added only when TIKTOK_REQUEST_ANALYTICS_SCOPES=true: set it
+  // together with Sandbox keys to demo analytics for app review, and in
+  // production once TikTok approves the revision that requests them.
   scopes = [
     'user.info.basic',
     'video.publish',
     'video.upload',
     'user.info.profile',
+    ...(process.env.TIKTOK_REQUEST_ANALYTICS_SCOPES === 'true'
+      ? ['user.info.stats', 'video.list']
+      : []),
   ];
   override maxConcurrentJob = 300;
   dto = TikTokDto;
